@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import List from './components/List/index.vue'
+import ListOfItems from './components/List/ListOfItems.vue'
 import type { Project } from './types/Project'
+import ModalCursor from './components/ModalCursor.vue'
+import { reactive, ref } from 'vue'
+
+const modalCursor = ref<typeof ModalCursor>()
 
 const projects: Project[] = [
   {
@@ -24,11 +28,33 @@ const projects: Project[] = [
     color: '#706D63'
   }
 ]
+
+const handleMouseEnter = () => {
+  modalCursor.value?.animateIn()
+}
+
+const handleMouseLeave = () => {
+  modalCursor.value?.animateOut()
+}
+
+const modalState = reactive({
+  active: false,
+  index: 0
+})
+
+// const handleItemIndex = (e: number) => {
+// modalState.index = e
+// }
 </script>
 
 <template>
   <main class="flex justify-center items-center h-screen">
-    <List :projects="projects" />
-    <ModalCursor :project="projects" />
+    <ListOfItems
+      @itemIndex="(e) => (modalState.index = e)"
+      :projects="projects"
+      @mouseenter="handleMouseEnter"
+      @mouseleave="handleMouseLeave"
+      :modalState="modalState" />
+    <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" />
   </main>
 </template>
