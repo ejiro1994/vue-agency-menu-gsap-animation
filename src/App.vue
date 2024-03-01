@@ -3,6 +3,7 @@ import ListOfItems from './components/List/ListOfItems.vue'
 import type { Project } from './types/Project'
 import ModalCursor from './components/ModalCursor.vue'
 import { reactive, ref } from 'vue'
+import brandLogo from'./assets/images/brand-logo.svg'
 
 const modalCursor = ref<typeof ModalCursor>()
 
@@ -48,7 +49,14 @@ const modalState = reactive({
 </script>
 
 <template>
-  <main class="flex justify-center items-center h-screen">
+  <main class="flex flex-col justify-center items-center h-screen">
+    <img
+      :src="brandLogo"
+      :width="140"
+      alt="Logo"
+      class="mx-auto pt-9 z-20 fixed top-1 opacity-90"
+
+    />
     <ListOfItems
       @itemIndex="(e) => (modalState.index = e)"
       :projects="projects"

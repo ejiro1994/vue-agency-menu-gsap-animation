@@ -6,6 +6,8 @@ import { onMounted, ref } from 'vue'
 import { CustomEase } from 'gsap/all'
 import { interpolate } from 'gsap/all'
 
+gsap.registerPlugin(CustomEase)
+
 defineProps<{
   projects: Project[]
   modalState: {
@@ -40,7 +42,7 @@ useEventListener(window, 'mousemove', (e) => {
 
 const modalContainer = ref(null)
 const cursor = ref(null)
-// const cursorLabel = ref(null)
+// const cursorLabel = ref(null)    
 
 const animateIn = () => {
   gsap.to([modalContainer.value, cursor.value], {
@@ -69,14 +71,13 @@ onMounted(() => {
   const x2 = gsap.quickTo(cursor.value, 'left', { duration: 0.5, ease: 'power3' })
   const y2 = gsap.quickTo(cursor.value, 'top', { duration: 0.5, ease: 'power3' })
 
-
-  useEventListener(window, 'mousemove', ({clientX, clientY}) => {
-   x(clientX)
+  useEventListener(window, 'mousemove', ({ clientX, clientY }) => {
+    x(clientX)
     y(clientY)
 
     x2(clientX)
     y2(clientY)
-})
+  })
 
   // window.addEventListener('mousemove', ({pageX, pageY}) => {
   //   x(pageX)
