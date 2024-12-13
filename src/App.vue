@@ -46,6 +46,7 @@ const modalState = reactive({
 // const handleItemIndex = (e: number) => {
 // modalState.index = e
 // }
+
 </script>
 
 <template>
@@ -55,7 +56,6 @@ const modalState = reactive({
       :width="140"
       alt="Logo"
       class="mx-auto pt-9 z-20 fixed top-1 opacity-90"
-
     />
     <ListOfItems
       @itemIndex="(e) => (modalState.index = e)"

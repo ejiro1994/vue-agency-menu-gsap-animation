@@ -125,7 +125,7 @@ onMounted(() => {
     :style="{ top: `${positionModalCursorY}px`, left: `${positionModalCursorX}px` }"
     ref="cursor"
     class="w-[80px] h-[80px] scale-0 rounded-full bg-[#455CE9] text-white flex items-center justify-center text-sm font-light pointer-events-none fixed top-0 left-0 z-20 -translate-x-1/2 -translate-y-1/2">
-    View
+    Listen
   </div>
 </template>
 
