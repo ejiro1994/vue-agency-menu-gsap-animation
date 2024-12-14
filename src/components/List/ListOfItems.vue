@@ -24,7 +24,7 @@ const handleMouseEnter = (index: number) => {
 </script>
 
 <template>
-  <ul class="w-[1000px] flex flex-col items-center justify-cente">
+  <ul class="w-full max-w-[1000px] px-4 md:px-6 flex flex-col items-center justify-center">
     <ListItem
       @mouseenter="handleMouseEnter(index)"
       v-for="(project, index) in projects"
