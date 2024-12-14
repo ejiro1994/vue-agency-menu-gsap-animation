@@ -3,7 +3,7 @@ import ListOfItems from './components/List/ListOfItems.vue'
 import type { Project } from './types/Project'
 import ModalCursor from './components/ModalCursor.vue'
 import { reactive, ref } from 'vue'
-import brandLogo from'./assets/images/brand-logo.svg'
+import brandLogo from'./assets/images/brand-logo2.svg'
 
 const modalCursor = ref<typeof ModalCursor>()
 
@@ -55,19 +55,26 @@ const modalState = reactive({
 </script>
 
 <template>
-  <main class="flex flex-col justify-center items-center h-screen">
-    <img
-      :src="brandLogo"
-      :width="140"
-      alt="Logo"
-      class="mx-auto pt-9 z-20 fixed top-1 opacity-90"
-    />
-    <ListOfItems
-      @itemIndex="(e) => (modalState.index = e)"
-      :projects="projects"
-      @mouseenter="handleMouseEnter"
-      @mouseleave="handleMouseLeave"
-      :modalState="modalState" />
-    <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" />
-  </main>
+  <div>
+    <nav class="fixed top-0 w-full py-6 flex justify-between items-center z-50 px-[14px] font-kormelink ">
+      <img
+        :src="brandLogo"
+        :width="120"
+        alt="Logo"
+        class="opacity-90"
+      />
+      <button class=" uppercase text-lg font-medium hover:opacity-70 transition-opacity">
+        Menu
+      </button>
+    </nav>
+    <main class="flex flex-col justify-center items-center h-screen">
+      <ListOfItems
+        @itemIndex="(e) => (modalState.index = e)"
+        :projects="projects"
+        @mouseenter="handleMouseEnter"
+        @mouseleave="handleMouseLeave"
+        :modalState="modalState" />
+      <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" />
+    </main>
+  </div>
 </template>
