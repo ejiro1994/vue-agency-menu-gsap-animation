@@ -100,7 +100,7 @@ const currentTrackIndex = ref(-1)
 const progress = ref(0)
 
 // Get the goToSlide function from the parent
-const goToSlide = inject('goToSlide')
+const goToSlide = inject('goToSlide') as ((slide: number) => void) | undefined
 
 // Add a function to load track duration
 const loadTrackDuration = async (track: Track): Promise<void> => {
