@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'WTKormelink';
+  src: url('./fonts/WT_Kormelink_Roman_WEB_1.1.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'WTKormelink';
+  src: url('./fonts/WT_Kormelink_Italic_WEB_1.1.woff2') format('woff2');
+  font-weight: normal;
+  font-style: italic;
+}

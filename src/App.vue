@@ -9,23 +9,28 @@ const modalCursor = ref<typeof ModalCursor>()
 
 const projects: Project[] = [
   {
-    title: 'C2 Montreal',
-    src: 'c2montreal.png',
+    title: 'music',
+    src: 'music.png',
     color: '#000000'
   },
   {
-    title: 'Office Studio',
-    src: 'officestudio.png',
+    title: 'films',
+    src: 'films.png',
     color: '#8C8C8C'
   },
   {
-    title: 'Locomotive',
-    src: 'locomotive.png',
+    title: 'live performances',
+    src: 'live-performances.png',
     color: '#000000'
   },
   {
-    title: 'Silencio',
-    src: 'silencio.png',
+    title: 'scorebook',
+    src: 'scorebook.png',
+    color: '#706D63'
+  },
+  {
+    title: 'about',
+    src: 'about.png',
     color: '#706D63'
   }
 ]
