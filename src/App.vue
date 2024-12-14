@@ -88,7 +88,7 @@ const toggleMenu = () => {
         {{ isMenuOpen ? 'Close' : 'Menu' }}
       </button>
     </nav>
-    <main class="w-screen">
+    <main class="w-screen mt-[100px]">
       <div 
         class="fixed inset-0 z-40 transition-transform duration-700 ease-in-out bg-white"
         :class="isMenuOpen ? 'translate-y-0' : '-translate-y-full'"
