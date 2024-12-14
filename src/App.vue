@@ -69,27 +69,40 @@ const goToSlide = (slideIndex: number) => {
 
 provide('goToSlide', goToSlide)
 
+const isMenuOpen = ref(false)
+
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value
+}
+
 </script>
 
 <template>
   <div>
-    <nav class="fixed top-0 w-full py-6 flex justify-between items-center z-50 px-[14px] font-kormelink bg-white ">
+    <nav class="fixed top-0 w-full py-6 flex justify-between items-center z-50 px-[14px] font-kormelink bg-white">
       <img :src="brandLogo" :width="120" alt="Logo" class="opacity-90" />
-      <button class=" uppercase text-[20px] font-medium hover:opacity-70 transition-opacity">
-        Menu
+      <button 
+        class="uppercase text-[20px] font-medium hover:opacity-70 transition-opacity"
+        @click="toggleMenu"
+      >
+        {{ isMenuOpen ? 'Close' : 'Menu' }}
       </button>
     </nav>
-    <main class="w-screen mt-[240px]">
-      
-      <!-- <ListOfItems
-        @itemIndex="(e) => (modalState.index = e)"
-        :projects="projects"
-        @mouseenter="handleMouseEnter"
-        @mouseleave="handleMouseLeave"
-        :modalState="modalState" />
-      <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" /> -->
+    <main class="w-screen">
+      <div 
+        class="fixed inset-0 z-40 transition-transform duration-700 ease-in-out bg-white"
+        :class="isMenuOpen ? 'translate-y-0' : '-translate-y-full'"
+      >
+        <ListOfItems
+          @itemIndex="(e) => (modalState.index = e)"
+          :projects="projects"
+          @mouseenter="handleMouseEnter"
+          @mouseleave="handleMouseLeave"
+          :modalState="modalState" 
+        />
+        <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" />
+      </div>
 
-      <!-- Carousel Section -->
       <Carousel ref="carouselRef" :perPage="1" :navigationEnabled="false" class="w-screen">
         <Slide>
           <div class="w-screen" style="background-color: #000000;">
@@ -113,13 +126,16 @@ provide('goToSlide', goToSlide)
         </Slide>
       </Carousel>
       <Playlist class="mb-8" />
-
-
-      <!-- Custom Navigation -->
-      <!-- <div class="fixed bottom-4 left-1/2 -translate-x-1/2 flex justify-center mt-4 z-10">
-        <button @click="handlePrev" class="mx-2">Previous</button>
-        <button @click="handleNext" class="mx-2">Next</button>
-      </div> -->
     </main>
   </div>
 </template>
+
+<style scoped>
+.translate-y-0 {
+  transform: translateY(0);
+}
+
+.-translate-y-full {
+  transform: translateY(-100%);
+}
+</style>

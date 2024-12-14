@@ -184,9 +184,7 @@ onUnmounted(() => {
 
 <style scoped>
 .playlist {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 2rem;
+  padding: 14px;
   font-family: serif;
 }
 
