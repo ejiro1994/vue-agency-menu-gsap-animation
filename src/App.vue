@@ -79,6 +79,14 @@ onMounted(() => {
   gsap.set(menuDrawer.value, {
     yPercent: -100
   })
+
+  // Force play all videos for iOS
+  const videos = document.querySelectorAll('video')
+  videos.forEach(video => {
+    video.play().catch(function(error) {
+      console.log("Video play failed:", error)
+    })
+  })
 })
 
 const toggleMenu = () => {
@@ -118,7 +126,14 @@ const toggleMenu = () => {
         <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" />
       </div>
 
-      <Carousel ref="carouselRef" :perPage="1" :navigationEnabled="false" class="w-screen px-[14px]">
+      <Carousel 
+        ref="carouselRef" 
+        :perPage="1" 
+        :navigationEnabled="false" 
+        :touchDrag="false"
+        :mouseDrag="false"
+        class="w-screen px-[14px]"
+      >
         <Slide>
           <div class="w-screen h-[250px] relative" style="background-color: #000000;">
             <video 
@@ -128,6 +143,9 @@ const toggleMenu = () => {
               muted 
               loop 
               playsinline
+              webkit-playsinline
+              preload="auto"
+              x-webkit-airplay="allow"
             ></video>
             <div class="absolute inset-0  mix-blend-hue"></div>
           </div>
@@ -141,6 +159,9 @@ const toggleMenu = () => {
               muted 
               loop 
               playsinline
+              webkit-playsinline
+              preload="auto"
+              x-webkit-airplay="allow"
               playbackRate="0.5"
             ></video>
             <div class="absolute inset-0  mix-blend-hue"></div>
@@ -155,6 +176,9 @@ const toggleMenu = () => {
               muted 
               loop 
               playsinline
+              webkit-playsinline
+              preload="auto"
+              x-webkit-airplay="allow"
             ></video>
             <div class="absolute inset-0 mix-blend-hue"></div>
           </div>
