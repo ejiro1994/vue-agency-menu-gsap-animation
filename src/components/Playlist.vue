@@ -147,7 +147,12 @@ const playTrack = (index: number) => {
 
 const updateProgress = () => {
     if (audio.duration) {
-        progress.value = (audio.currentTime / audio.duration) * 100
+        // Use GSAP to smoothly animate the progress value
+        gsap.to(progress, {
+            value: (audio.currentTime / audio.duration) * 100,
+            duration: 0.1,
+            ease: "linear"
+        });
     }
 }
 
