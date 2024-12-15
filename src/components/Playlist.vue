@@ -1,6 +1,6 @@
 <template>
     <div class="playlist">
-        <h1 class="playlist-title font-kormelink italic">Playlist</h1>
+        <h1 class="playlist-title font-kormelink italic mt-4">Playlist - <span class="fancy-text size-8">S</span>corebook</h1>
 
         <div class="player-container">
             <button class="play-button" @click="togglePlay" :aria-label="isPlaying ? 'Pause' : 'Play'">
