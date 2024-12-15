@@ -1,97 +1,88 @@
 <template>
-  <div class="playlist">
-    <h1 class="playlist-title font-kormelink italic">Playlist</h1>
-    
-    <div class="player-container">
-      <button 
-        class="play-button" 
-        @click="togglePlay"
-        :aria-label="isPlaying ? 'Pause' : 'Play'"
-      >
-        <svg v-if="!isPlaying" viewBox="0 0 24 24" class="play-icon">
-          <path d="M8 5v14l11-7z"/>
-        </svg>
-        <svg v-else viewBox="0 0 24 24" class="pause-icon">
-          <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-        </svg>
-      </button>
-      
-      <div class="progress-bar" @click="seek">
-        <div class="progress-line"></div>
-        <div 
-          class="progress-indicator" 
-          :style="{ left: `${progress}%` }"
-        ></div>
-      </div>
-    </div>
+    <div class="playlist">
+        <h1 class="playlist-title font-kormelink italic">Playlist</h1>
 
-    <div class="playlist-items">
-      <div 
-        v-for="(track, index) in playlist" 
-        :key="index"
-        class="track-item"
-        :class="{ active: currentTrackIndex === index }"
-        @click="playTrack(index)"
-      >
-        <h2 class="track-title font-kormelink">
-          <template v-if="track.title.startsWith('H')">
-            <span class="fancy-text">H</span>{{ track.title.slice(1) }}
-          </template>
-          <template v-else>
-            {{ track.title }}
-          </template>
-        </h2>
-        <p class="track-artist">{{ track.artist }}</p>
-        <p class="track-duration">{{ track.duration }}</p>
-      </div>
+        <div class="player-container">
+            <button class="play-button" @click="togglePlay" :aria-label="isPlaying ? 'Pause' : 'Play'">
+                <svg v-if="!isPlaying" viewBox="0 0 24 24" class="play-icon">
+                    <path d="M8 5v14l11-7z" />
+                </svg>
+                <svg v-else viewBox="0 0 24 24" class="pause-icon">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                </svg>
+            </button>
+
+            <div class="progress-bar" @click="seek">
+                <div class="progress-line"></div>
+                <div class="progress-indicator" :style="{ left: `${progress}%` }"></div>
+            </div>
+        </div>
+
+        <div class="playlist-items">
+            <div v-for="(track, index) in playlist" :key="index" class="track-item"
+                :class="{ active: currentTrackIndex === index }" @click="playTrack(index)">
+                <h2 class="track-title font-kormelink">
+                    <template v-if="track.title.startsWith('H')">
+                        <span class="fancy-text size-6">H</span>{{ track.title.slice(1) }}
+                    </template>
+                    <template v-else>
+                        {{ track.title }}
+                    </template>
+                </h2>
+                <p class="track-artist">{{ track.artist }}</p>
+                <p class="track-duration">{{ track.duration }}</p>
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, inject } from 'vue'
+import gsap from 'gsap'
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 
-// Add this helper function to format time in MM:SS
-const formatTime = (seconds: number): string => {
-  const minutes = Math.floor(seconds / 60)
-  const remainingSeconds = Math.floor(seconds % 60)
-  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
-}
+gsap.registerPlugin(ScrollToPlugin)
 
 // Modify the Track interface to use number for duration
 interface Track {
-  title: string
-  artist: string
-  duration: string // This will still be string but will be updated with actual duration
-  url: string
+    title: string
+    artist: string
+    duration: string // This will still be string but will be updated with actual duration
+    url: string
 }
 
 // Add this after the Track interface
 const trackToSlideMap: Record<string, number> = {
-  'HIGHER (STRING ARRANGEMENT)': 1,
-  'DUALITY (SHORT FILM)': 2,
-  'GOODUMS (LIVE STRING ARRANGEMENT)': 3
+    'HIGHER (STRING ARRANGEMENT)': 1,
+    'DUALITY (SHORT FILM)': 2,
+    'GOODUMS (LIVE STRING ARRANGEMENT)': 3
+}
+
+const formatTime = (seconds: number): string => {
+    const minutes = Math.floor(seconds / 60)
+    const remainingSeconds = Math.floor(seconds % 60)
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
 }
 
 const playlist = ref<Track[]>([
-  {
-    title: '\u0048IGHER (STRING ARRANGEMENT)',
-    artist: 'HIGHLYY',
-    duration: '0:38',
-    url: '/playlist/higher.m4a'
-  },
-  {
-    title: 'DUALITY (SHORT FILM)',
-    artist: 'EJB',
-    duration: '0:38',
-    url: '/playlist/duality.mp3'
-  },
-  {
-    title: 'GOODUMS (LIVE STRING ARRANGEMENT)',
-    artist: 'UNKNOWN-T',
-    duration: '0:38',
-    url: '/playlist/goodums.m4a'
-  }
+    {
+        title: '\u0048IGHER (STRING ARRANGEMENT)',
+        artist: 'HIGHLYY',
+        duration: '0:38',
+        url: '/playlist/higher.m4a'
+    },
+    {
+        title: 'DUALITY (SHORT FILM)',
+        artist: 'EJB',
+        duration: '0:38',
+        url: '/playlist/duality.mp3'
+    },
+    {
+        title: 'GOODUMS (LIVE STRING ARRANGEMENT)',
+        artist: 'UNKNOWN-T',
+        duration: '0:38',
+        url: '/playlist/goodums.m4a'
+    }
 ])
 
 const audio = new Audio()
@@ -104,195 +95,203 @@ const goToSlide = inject('goToSlide') as ((slide: number) => void) | undefined
 
 // Add a function to load track duration
 const loadTrackDuration = async (track: Track): Promise<void> => {
-  return new Promise((resolve) => {
-    const audio = new Audio(track.url)
-    audio.addEventListener('loadedmetadata', () => {
-      track.duration = formatTime(audio.duration)
-      resolve()
+    return new Promise((resolve) => {
+        const audio = new Audio(track.url)
+        audio.addEventListener('loadedmetadata', () => {
+            track.duration = formatTime(audio.duration)
+            resolve()
+        })
+        audio.addEventListener('error', () => {
+            track.duration = '0:00' // fallback if loading fails
+            resolve()
+        })
     })
-    audio.addEventListener('error', () => {
-      track.duration = '0:00' // fallback if loading fails
-      resolve()
-    })
-  })
 }
 
 const togglePlay = () => {
-  if (currentTrackIndex.value === -1) {
-    playTrack(0)
-    return
-  }
-  
-  if (isPlaying.value) {
-    audio.pause()
-  } else {
-    audio.play()
-  }
-  isPlaying.value = !isPlaying.value
+    if (currentTrackIndex.value === -1) {
+        playTrack(0)
+        return
+    }
+
+    if (isPlaying.value) {
+        audio.pause()
+    } else {
+        audio.play()
+    }
+    isPlaying.value = !isPlaying.value
 }
 
 const playTrack = (index: number) => {
-  if (currentTrackIndex.value === index) {
-    togglePlay()
-    return
-  }
+    if (currentTrackIndex.value === index) {
+        togglePlay()
+        return
+    }
 
-  currentTrackIndex.value = index
-  audio.src = playlist.value[index].url
-  audio.play()
-  isPlaying.value = true
-  
-  // Check if there's a corresponding slide for this track
-  const trackTitle = playlist.value[index].title
-  if (goToSlide && trackTitle in trackToSlideMap) {
-    goToSlide(trackToSlideMap[trackTitle])
-  }
+    currentTrackIndex.value = index
+    audio.src = playlist.value[index].url
+    audio.play()
+    isPlaying.value = true
+    
+    gsap.to(window, {
+        duration: .5,
+        scrollTo: { y: 0, offsetY: 100 }, // offsetY accounts for the header
+        ease: "cubic-bezier(0.65, 0, 0.35, 1)"
+    })
+    
+    const trackTitle = playlist.value[index].title
+    if (goToSlide && trackTitle in trackToSlideMap) {
+        goToSlide(trackToSlideMap[trackTitle])
+    }
 }
 
 const updateProgress = () => {
-  if (audio.duration) {
-    progress.value = (audio.currentTime / audio.duration) * 100
-  }
+    if (audio.duration) {
+        progress.value = (audio.currentTime / audio.duration) * 100
+    }
 }
 
 const seek = (event: MouseEvent) => {
-  const progressBar = event.currentTarget as HTMLElement
-  const rect = progressBar.getBoundingClientRect()
-  const percent = (event.clientX - rect.left) / rect.width
-  audio.currentTime = percent * audio.duration
+    const progressBar = event.currentTarget as HTMLElement
+    const rect = progressBar.getBoundingClientRect()
+    const percent = (event.clientX - rect.left) / rect.width
+    audio.currentTime = percent * audio.duration
 }
 
 // Load all track durations when component mounts
 onMounted(async () => {
-  audio.addEventListener('timeupdate', updateProgress)
-  audio.addEventListener('ended', () => {
-    isPlaying.value = false
-    progress.value = 0
-  })
+    audio.addEventListener('timeupdate', updateProgress)
+    audio.addEventListener('ended', () => {
+        isPlaying.value = false
+        progress.value = 0
+    })
 
-  // Load durations for all tracks
-  for (const track of playlist.value) {
-    await loadTrackDuration(track)
-  }
+    // Load durations for all tracks
+    for (const track of playlist.value) {
+        await loadTrackDuration(track)
+    }
 })
 
 onUnmounted(() => {
-  audio.removeEventListener('timeupdate', updateProgress)
-  audio.pause()
+    audio.removeEventListener('timeupdate', updateProgress)
+    audio.pause()
 })
 </script>
 
 <style scoped>
 .playlist {
-  padding: 14px;
-  font-family: serif;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 14px;
+    font-family: serif;
 }
 
 .playlist-title {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  font-weight: 300;
-  /* font-style: italic; */
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-weight: 300;
+    /* font-style: italic; */
 }
 
 .player-container {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
 }
 
 .play-button {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 1px solid #000;
-  background: transparent;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid #000;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 }
 
-.play-icon, .pause-icon {
-  width: 28px;
-  height: 28px;
-  fill: currentColor;
+.play-icon,
+.pause-icon {
+    width: 28px;
+    height: 28px;
+    fill: currentColor;
 }
 
 .progress-bar {
-  flex-grow: 1;
-  height: 1px;
-  background: #ddd;
-  position: relative;
-  cursor: pointer;
+    flex-grow: 1;
+    height: 1px;
+    background: #ddd;
+    position: relative;
+    cursor: pointer;
 }
 
 .progress-line {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
 }
 
 .progress-indicator {
-  position: absolute;
-  top: 50%;
-  width: 1px;
-  height: 50px;
-  background: #000;
-  transform: translateY(-50%);
-  pointer-events: none;
+    position: absolute;
+    top: 50%;
+    width: 1px;
+    height: 50px;
+    background: #000;
+    transform: translateY(-50%);
+    pointer-events: none;
 }
 
 .track-item {
-  padding: 1rem;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 }
 
 .track-item:hover {
-  background: #f9f9f9;
+    background: #f9f9f9;
 }
 
 .track-item.active {
-  background: #f5f5f5;
+    background: #f5f5f5;
 }
 
 .track-title {
-  font-size: 1.2rem;
-  margin: 0;
-  font-family: 'WTKormelink', serif;
+    font-size: 1.2rem;
+    margin: 0;
+    font-family: 'WTKormelink', serif;
 }
 
 .track-artist {
-  font-size: 0.9rem;
-  margin: 0;
-  font-family: 'WTKormelink', serif;
-  opacity: 0.8;
+    font-size: 0.9rem;
+    margin: 0;
+    font-family: 'WTKormelink', serif;
+    opacity: 0.8;
 }
 
 .track-duration {
-  font-size: 0.8rem;
-  color: #666;
-  margin: 0;
-  font-family: 'WTKormelink', serif;
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0;
+    font-family: 'WTKormelink', serif;
 }
 
 .swash-caps {
-  font-feature-settings: "swsh" 1;
+    font-feature-settings: "swsh" 1;
 }
 
 .fancy-text {
-  font-style: italic;
-  font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
-  -webkit-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
-  -moz-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
+    font-style: italic;
+    font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
+    -webkit-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
+    -moz-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
 }
-</style> 
+</style>

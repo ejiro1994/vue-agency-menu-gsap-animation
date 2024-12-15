@@ -3,10 +3,11 @@ import ListOfItems from './components/List/ListOfItems.vue'
 import type { Project } from './types/Project'
 import ModalCursor from './components/ModalCursor.vue'
 import Playlist from './components/Playlist.vue'
-import { reactive, ref, provide } from 'vue'
+import { reactive, ref, provide, onMounted } from 'vue'
 import brandLogo from './assets/images/brand-logo2.svg'
 import { Carousel, Slide } from 'vue3-carousel'
 import 'vue3-carousel/dist/carousel.css'
+import gsap from 'gsap'
 
 const modalCursor = ref<typeof ModalCursor>()
 
@@ -71,8 +72,33 @@ provide('goToSlide', goToSlide)
 
 const isMenuOpen = ref(false)
 
+const menuDrawer = ref(null)
+
+// Initialize GSAP by setting initial state
+onMounted(() => {
+  gsap.set(menuDrawer.value, {
+    yPercent: -100
+  })
+})
+
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
+  
+  if (isMenuOpen.value) {
+    // Animate menu in
+    gsap.to(menuDrawer.value, {
+      yPercent: 0,
+      duration: 0.7,
+      ease: 'power3.inOut'
+    })
+  } else {
+    // Animate menu out
+    gsap.to(menuDrawer.value, {
+      yPercent: -100,
+      duration: 0.7,
+      ease: 'power3.inOut'
+    })
+  }
 }
 
 </script>
@@ -90,8 +116,8 @@ const toggleMenu = () => {
     </nav>
     <main class="w-screen mt-[100px]">
       <div 
-        class="fixed inset-0 z-40 transition-transform duration-700 ease-in-out bg-white"
-        :class="isMenuOpen ? 'translate-y-0' : '-translate-y-full'"
+        ref="menuDrawer"
+        class="fixed inset-0 z-40 bg-white mt-[94px]"
       >
         <ListOfItems
           @itemIndex="(e) => (modalState.index = e)"
@@ -131,11 +157,5 @@ const toggleMenu = () => {
 </template>
 
 <style scoped>
-.translate-y-0 {
-  transform: translateY(0);
-}
-
-.-translate-y-full {
-  transform: translateY(-100%);
-}
+/* Remove the previous transition classes as they're no longer needed */
 </style>
