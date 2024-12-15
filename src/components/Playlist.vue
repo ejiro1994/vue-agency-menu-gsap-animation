@@ -55,7 +55,8 @@ interface Track {
 const trackToSlideMap: Record<string, number> = {
     'HIGHER (STRING ARRANGEMENT)': 0,
     'DUALITY (SHORT FILM)': 1,
-    'GOODUMS (LIVE STRING ARRANGEMENT)': 2
+    'GOODUMS (LIVE STRING ARRANGEMENT)': 2,
+    'DEEP (LIVE STRING ARRANGEMENT)': 3
 }
 
 const formatTime = (seconds: number): string => {
@@ -82,6 +83,12 @@ const playlist = ref<Track[]>([
         artist: 'UNKNOWN-T',
         duration: '0:38',
         url: '/playlist/goodums.m4a'
+    },
+    {
+        title: 'DEEP (LIVE STRING ARRANGEMENT)',
+        artist: 'V\'nessa',
+        duration: '0:38',
+        url: '/playlist/deep.m4a'
     }
 ])
 

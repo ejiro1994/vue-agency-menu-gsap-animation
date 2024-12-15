@@ -141,6 +141,7 @@ const toggleMenu = () => {
               muted 
               loop 
               playsinline
+              playbackRate="0.5"
             ></video>
             <div class="absolute inset-0  mix-blend-hue"></div>
           </div>
@@ -160,7 +161,7 @@ const toggleMenu = () => {
         </Slide>
         <Slide>
           <div class="w-screen h-[383px]" style="background-color: #000000;">
-            <img src="/images/carousel/1.png" alt="Project Image 1" class="w-full h-full object-cover" />
+            <img src="/images/carousel/2.png" alt="Project Image 2" class="w-full h-full object-cover" />
           </div>
         </Slide>
         <Slide>
