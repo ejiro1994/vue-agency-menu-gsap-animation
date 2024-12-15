@@ -134,12 +134,12 @@ const playTrack = (index: number) => {
     isPlaying.value = true
     
     gsap.to(window, {
-        duration: 1.8,
+        duration: 2.2,
         scrollTo: { 
             y: 0, 
             offsetY: 100
         },
-        ease: "expo.inOut"
+        ease: "cubic-bezier(0.33, 0, 0.1, 1)"
     })
     
     const trackTitle = playlist.value[index].title
