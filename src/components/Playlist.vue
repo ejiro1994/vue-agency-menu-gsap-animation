@@ -299,4 +299,8 @@ onUnmounted(() => {
     -webkit-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
     -moz-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
 }
+
+.size-6 {
+    font-size: 22px;
+}
 </style>
