@@ -129,7 +129,7 @@ const toggleMenu = () => {
               loop 
               playsinline
             ></video>
-            <div class="absolute inset-0 bg-black mix-blend-hue"></div>
+            <div class="absolute inset-0  mix-blend-hue"></div>
           </div>
         </Slide>
         <Slide>
@@ -142,7 +142,7 @@ const toggleMenu = () => {
               loop 
               playsinline
             ></video>
-            <div class="absolute inset-0 bg-black mix-blend-hue"></div>
+            <div class="absolute inset-0  mix-blend-hue"></div>
           </div>
         </Slide>
         <Slide>
