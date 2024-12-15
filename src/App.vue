@@ -62,7 +62,7 @@ const handlePrev = () => {
 const handleNext = () => {
   carouselRef.value?.next()
   console.log('Next button clicked')
-};
+}
 
 const goToSlide = (slideIndex: number) => {
   carouselRef.value?.slideTo(slideIndex)
@@ -83,7 +83,7 @@ onMounted(() => {
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
-  
+
   if (isMenuOpen.value) {
     // Animate menu in
     gsap.to(menuDrawer.value, {
@@ -107,46 +107,74 @@ const toggleMenu = () => {
   <div>
     <nav class="fixed top-0 w-full py-6 flex justify-between items-center z-50 px-[14px] font-kormelink bg-white">
       <img :src="brandLogo" :width="120" alt="Logo" class="opacity-90" />
-      <button 
-        class="uppercase text-[20px] font-medium hover:opacity-70 transition-opacity"
-        @click="toggleMenu"
-      >
+      <button class="uppercase text-[20px] font-medium hover:opacity-70 transition-opacity" @click="toggleMenu">
         {{ isMenuOpen ? 'Close' : 'Menu' }}
       </button>
     </nav>
     <main class="w-screen mt-[100px]">
-      <div 
-        ref="menuDrawer"
-        class="fixed inset-0 z-40 bg-white mt-[94px]"
-      >
-        <ListOfItems
-          @itemIndex="(e) => (modalState.index = e)"
-          :projects="projects"
-          @mouseenter="handleMouseEnter"
-          @mouseleave="handleMouseLeave"
-          :modalState="modalState" 
-        />
+      <div ref="menuDrawer" class="fixed inset-0 z-40 bg-white mt-[94px]">
+        <ListOfItems @itemIndex="(e) => (modalState.index = e)" :projects="projects" @mouseenter="handleMouseEnter"
+          @mouseleave="handleMouseLeave" :modalState="modalState" />
         <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" />
       </div>
 
       <Carousel ref="carouselRef" :perPage="1" :navigationEnabled="false" class="w-screen">
         <Slide>
-          <div class="w-screen" style="background-color: #000000;">
+          <div class="w-screen h-[383px] relative" style="background-color: #000000;">
+            <video 
+              src="/videos/higher.mov" 
+              class="w-full h-full object-cover" 
+              autoplay 
+              muted 
+              loop 
+              playsinline
+            ></video>
+            <div class="absolute inset-0 bg-black mix-blend-hue"></div>
+          </div>
+        </Slide>
+        <Slide>
+          <div class="w-screen h-[383px] relative" style="background-color: #000000;">
+            <video 
+              src="/videos/duality.mov" 
+              class="w-full h-full object-cover" 
+              autoplay 
+              muted 
+              loop 
+              playsinline
+            ></video>
+            <div class="absolute inset-0 bg-black mix-blend-hue"></div>
+          </div>
+        </Slide>
+        <Slide>
+          <div class="w-screen h-[383px] relative" style="background-color: #000000;">
+            <video 
+              src="/videos/unknownt.mov" 
+              class="w-full h-full object-cover" 
+              autoplay 
+              muted 
+              loop 
+              playsinline
+            ></video>
+            <div class="absolute inset-0 mix-blend-hue"></div>
+          </div>
+        </Slide>
+        <Slide>
+          <div class="w-screen h-[383px]" style="background-color: #000000;">
             <img src="/images/carousel/1.png" alt="Project Image 1" class="w-full h-full object-cover" />
           </div>
         </Slide>
         <Slide>
-          <div class="w-screen" style="background-color: #000000;">
+          <div class="w-screen h-[383px]" style="background-color: #000000;">
             <img src="/images/carousel/3.png" alt="Project Image 3" class="w-full h-full object-cover" />
           </div>
         </Slide>
         <Slide>
-          <div class="w-screen" style="background-color: #000000;">
+          <div class="w-screen h-[383px]" style="background-color: #000000;">
             <img src="/images/carousel/4.png" alt="Project Image 4" class="w-full h-full object-cover" />
           </div>
         </Slide>
         <Slide>
-          <div class="w-screen" style="background-color: #000000;">
+          <div class="w-screen h-[383px]" style="background-color: #000000;">
             <img src="/images/carousel/5.png" alt="Project Image 5" class="w-full h-full object-cover" />
           </div>
         </Slide>

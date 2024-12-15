@@ -1,6 +1,6 @@
 <template>
     <div class="playlist">
-        <h1 class="playlist-title font-kormelink italic mt-4">Playlist - <span class="fancy-text size-8">S</span>corebook</h1>
+        <h1 class="playlist-title font-kormelink italic mt-4">Playlist</h1>
 
         <div class="player-container">
             <button class="play-button" @click="togglePlay" :aria-label="isPlaying ? 'Pause' : 'Play'">
@@ -47,15 +47,15 @@ gsap.registerPlugin(ScrollToPlugin)
 interface Track {
     title: string
     artist: string
-    duration: string // This will still be string but will be updated with actual duration
+    duration: string
     url: string
 }
 
-// Add this after the Track interface
+// Update the trackToSlideMap to point "HIGHER" to slide 0
 const trackToSlideMap: Record<string, number> = {
-    'HIGHER (STRING ARRANGEMENT)': 1,
-    'DUALITY (SHORT FILM)': 2,
-    'GOODUMS (LIVE STRING ARRANGEMENT)': 3
+    'HIGHER (STRING ARRANGEMENT)': 0,
+    'DUALITY (SHORT FILM)': 1,
+    'GOODUMS (LIVE STRING ARRANGEMENT)': 2
 }
 
 const formatTime = (seconds: number): string => {
