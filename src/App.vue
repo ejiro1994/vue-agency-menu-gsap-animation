@@ -118,7 +118,7 @@ const toggleMenu = () => {
         <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" />
       </div>
 
-      <Carousel ref="carouselRef" :perPage="1" :navigationEnabled="false" class="w-screen">
+      <Carousel ref="carouselRef" :perPage="1" :navigationEnabled="false" class="w-screen px-[14px]">
         <Slide>
           <div class="w-screen h-[383px] relative" style="background-color: #000000;">
             <video 
