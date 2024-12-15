@@ -86,7 +86,7 @@ const playlist = ref<Track[]>([
     },
     {
         title: 'DEEP (LIVE STRING ARRANGEMENT)',
-        artist: 'V\'nessa',
+        artist: 'V\'NESSA',
         duration: '0:38',
         url: '/playlist/deep.m4a'
     }
