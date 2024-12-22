@@ -30,7 +30,7 @@ provide('goToSlide', goToSlide)
 
 <style scoped>
 .page-container {
-    padding: 120px 0 40px;
+    padding: 0px 0 40px;
     width: 100%;
 }
 

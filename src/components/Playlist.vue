@@ -317,12 +317,12 @@ onUnmounted(() => {
     font-size: 0.9rem;
     margin: 0;
     font-family: 'WTKormelink', serif;
-    opacity: 0.8;
+    /* opacity: 0.8; */
 }
 
 .track-duration {
     font-size: 0.8rem;
-    color: #666;
+    color: #000000;
     margin: 0;
     font-family: 'WTKormelink', serif;
 }
