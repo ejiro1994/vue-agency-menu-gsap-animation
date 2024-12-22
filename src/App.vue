@@ -120,10 +120,12 @@ const toggleMenu = () => {
         <nav class="menu-nav p-8 md:p-14">
           <router-link v-for="(project, index) in projects" :key="project.title"
             :to="'/' + project.title.toLowerCase().replace(' ', '-')"
-            class="block text-3xl md:text-4xl lg:text-5xl mb-6 md:mb-8 font-kormelink hover:opacity-70 transition-opacity uppercase relative pl-12 md:pl-16"
+            class="block text-3xl md:text-4xl lg:text-5xl mb-6 md:mb-8 font-kormelink hover:opacity-70 transition-opacity uppercase relative border-b-[1px] pt-4 pb-4"
             @mouseenter="() => handleMouseEnter(index)" @mouseleave="handleMouseLeave" @click="toggleMenu">
-            <span class="absolute left-0 top-1 text-xl md:text-2xl opacity-50">0{{ index + 1 }}</span>
-            {{ project.title }}
+            <div class="flex items-center">
+              <span class="text-sm md:text-sm opacity-50 w-[60px]">(0{{ index + 1 }})</span>
+              <h2 class="flex-1">{{ project.title }}</h2>
+            </div>
           </router-link>
         </nav>
         <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" />
