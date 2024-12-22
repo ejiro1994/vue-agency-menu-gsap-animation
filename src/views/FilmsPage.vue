@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <MediaCarousel ref="carousel" />
-    <h1 class="page-title font-kormelink italic mt-4">Films</h1>
+    <h1 class="page-title font-kormelink italic mt-4"><span class="">F</span>ilms</h1>
     <div class="content-container">
       <Playlist :filter="'FILM'" />
     </div>
@@ -38,5 +38,12 @@ provide('goToSlide', goToSlide)
   margin-bottom: 2rem;
   font-weight: 300;
   padding: 0 14px;
+}
+
+.fancy-text {
+    font-style: italic;
+    font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
+    -webkit-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
+    -moz-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
 }
 </style> 

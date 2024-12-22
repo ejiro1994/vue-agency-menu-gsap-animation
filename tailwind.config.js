@@ -5,9 +5,6 @@ export default {
     extend: {
       fontFamily: {
         'kormelink': ['WTKormelink', 'serif']
-      },
-      fontFeatureSettings: {
-        'swash': '"swsh" 1'
       }
     }
   },
