@@ -18,7 +18,7 @@ const projects: Project[] = [
     color: '#000000'
   },
   {
-    title: 'films',
+    title: 'film scores',
     src: 'films.png',
     color: '#8C8C8C'
   },

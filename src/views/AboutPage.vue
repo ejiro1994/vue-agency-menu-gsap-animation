@@ -12,10 +12,23 @@
                 innovative compositions that resonate deeply and elevate every project.
             </p>
             <div class="contact-section mt-12 mb-8">
-                <h2 class="text-xl font-kormelink italic mb-4">Get in Touch</h2>
-                <a href="mailto:hello@ejirolennox.com" class="email-link font-kormelink text-lg hover:opacity-70 transition-opacity uppercase">
-                    hello@ejirolennox.com
-                </a>
+                <h2 class="text-xl font-kormelink italic mb-6">Get in Touch</h2>
+                <div class="contact-links space-y-4">
+                    <a href="mailto:hello@ejirolennox.com" class="contact-link font-kormelink text-lg hover:opacity-70 transition-opacity uppercase block">
+                        hello@ejirolennox.com
+                    </a>
+                    <div class="social-links flex gap-6 pt-4">
+                        <a href="https://instagram.com/ejirolennox" target="_blank" rel="noopener noreferrer" class="contact-link font-kormelink text-lg hover:opacity-70 transition-opacity uppercase">
+                            Instagram
+                        </a>
+                        <a href="https://twitter.com/ejirolennox" target="_blank" rel="noopener noreferrer" class="contact-link font-kormelink text-lg hover:opacity-70 transition-opacity uppercase">
+                            Twitter
+                        </a>
+                        <a href="https://youtube.com/@ejirolennox" target="_blank" rel="noopener noreferrer" class="contact-link font-kormelink text-lg hover:opacity-70 transition-opacity uppercase">
+                            Youtube
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -59,11 +72,18 @@
     padding-top: 2rem;
 }
 
-.email-link {
+.contact-link {
     display: inline-block;
     text-decoration: none;
     color: #000;
     border-bottom: 1px solid currentColor;
     padding-bottom: 2px;
+}
+
+@media (max-width: 640px) {
+    .social-links {
+        flex-direction: column;
+        gap: 1rem;
+    }
 }
 </style>

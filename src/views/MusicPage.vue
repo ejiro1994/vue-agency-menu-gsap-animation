@@ -1,10 +1,9 @@
 <template>
     <div class="page-container">
         <MediaCarousel ref="carousel" />
-        <h1 class="page-title font-kormelink italic mt-4"><span class="italic fancy-text text-5xl">R</span>ecordings</h1>
+        <h1 class="page-title font-kormelink italic mt-4 text-base">Featured String Arrangements</h1>
         <p class="font-kormelink italic text-base px-4 text-gray-500 mb-8">
-            I craft emotionally resonant string arrangements that amplify creativity and
-            transforms songs.
+            Bring Your Music to Life with Emotionally Captivating String Arrangements.
         </p>
         <div class="content-container">
             <Playlist />
@@ -38,7 +37,7 @@ provide('goToSlide', goToSlide)
 }
 
 .page-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
     margin-bottom: 2rem;
     font-weight: 300;
     padding: 0 14px;
