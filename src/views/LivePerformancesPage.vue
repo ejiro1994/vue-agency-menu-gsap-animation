@@ -30,8 +30,6 @@ provide('goToSlide', goToSlide)
 }
 
 .content-container {
-  max-width: 1200px;
-  margin: 0 auto;
   width: 100%;
 }
 
@@ -40,7 +38,5 @@ provide('goToSlide', goToSlide)
   margin-bottom: 2rem;
   font-weight: 300;
   padding: 0 14px;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 </style> 

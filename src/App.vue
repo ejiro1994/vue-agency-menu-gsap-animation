@@ -122,7 +122,7 @@ const toggleMenu = () => {
         <nav class="menu-nav p-8 md:p-14">
           <router-link v-for="(project, index) in projects" :key="project.title"
             :to="'/' + project.title.toLowerCase().replace(' ', '-')"
-            class="block text-3xl md:text-4xl lg:text-5xl mb-6 md:mb-8 font-kormelink hover:opacity-70 transition-opacity uppercase relative border-b-[1px] pt-4 pb-4"
+            class="block text-3xl md:text-4xl lg:text-5xl font-kormelink hover:opacity-70 transition-opacity uppercase relative border-b-[1px] py-10"
             @mouseenter="() => handleMouseEnter(index)" @mouseleave="handleMouseLeave" @click="toggleMenu">
             <div class="flex items-center">
               <span class="text-sm md:text-sm opacity-50 w-[60px]">(0{{ index + 1 }})</span>
