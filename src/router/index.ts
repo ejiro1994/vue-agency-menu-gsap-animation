@@ -18,7 +18,7 @@ const router = createRouter({
       component: MusicPage
     },
     {
-      path: '/films',
+      path: '/film-scores',
       name: 'Films',
       component: FilmsPage
     },
