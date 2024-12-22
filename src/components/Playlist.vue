@@ -1,6 +1,6 @@
 <template>
     <div class="playlist">
-        <h1 class="playlist-title font-kormelink italic mt-4">Playlist</h1>
+        <!-- <h1 class="playlist-title font-kormelink italic mt-4">Playlist</h1> -->
 
         <div class="player-container">
             <button class="play-button" @click="togglePlay" :aria-label="isPlaying ? 'Pause' : 'Play'">
@@ -37,11 +37,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, inject } from 'vue'
+import { ref, onMounted, onUnmounted, inject, computed } from 'vue'
 import gsap from 'gsap'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 
 gsap.registerPlugin(ScrollToPlugin)
+
+interface Props {
+  filter?: string
+}
+
+const props = defineProps<Props>()
 
 // Modify the Track interface to use number for duration
 interface Track {
@@ -65,7 +71,7 @@ const formatTime = (seconds: number): string => {
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
 }
 
-const playlist = ref<Track[]>([
+const allTracks = ref<Track[]>([
     {
         title: '\u0048IGHER (STRING ARRANGEMENT)',
         artist: 'HIGHLYY',
@@ -91,6 +97,14 @@ const playlist = ref<Track[]>([
         url: '/playlist/deep.m4a'
     }
 ])
+
+const playlist = computed(() => {
+    if (!props.filter) return allTracks.value
+    
+    return allTracks.value.filter(track => 
+        track.title.includes(props.filter)
+    )
+})
 
 const audio = new Audio()
 const isPlaying = ref(false)

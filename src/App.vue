@@ -27,11 +27,11 @@ const projects: Project[] = [
     src: 'live-performances.png',
     color: '#000000'
   },
-  {
-    title: 'scorebook',
-    src: 'scorebook.png',
-    color: '#706D63'
-  },
+  // {
+  //   title: 'scorebook',
+  //   src: 'scorebook.png',
+  //   color: '#706D63'
+  // },
   {
     title: 'about',
     src: 'about.png',
@@ -121,94 +121,39 @@ const toggleMenu = () => {
     </nav>
     <main class="w-screen mt-[100px]">
       <div ref="menuDrawer" class="fixed inset-0 z-40 bg-white mt-[94px]">
-        <ListOfItems @itemIndex="(e) => (modalState.index = e)" :projects="projects" @mouseenter="handleMouseEnter"
-          @mouseleave="handleMouseLeave" :modalState="modalState" />
+        <nav class="menu-nav p-14">
+          <router-link 
+            v-for="project in projects" 
+            :key="project.title"
+            :to="'/' + project.title.toLowerCase().replace(' ', '-')"
+            class="block text-3xl mb-6 font-kormelink hover:opacity-70 transition-opacity uppercase"
+            @mouseenter="handleMouseEnter"
+            @mouseleave="handleMouseLeave"
+            @click="toggleMenu"
+          >
+            {{ project.title }}
+          </router-link>
+        </nav>
         <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" />
       </div>
 
-      <Carousel 
-        ref="carouselRef" 
-        :perPage="1" 
-        :navigationEnabled="false" 
-        :touchDrag="false"
-        :mouseDrag="false"
-        class="w-screen px-[14px]"
-      >
-        <Slide>
-          <div class="w-screen h-[250px] relative" style="background-color: #000000;">
-            <video 
-              src="/videos/higher.mov" 
-              class="w-full h-full object-cover" 
-              autoplay 
-              muted 
-              loop 
-              playsinline
-              webkit-playsinline
-              preload="auto"
-              x-webkit-airplay="allow"
-            ></video>
-            <div class="absolute inset-0  mix-blend-hue"></div>
-          </div>
-        </Slide>
-        <Slide>
-          <div class="w-screen h-[250px] relative" style="background-color: #000000;">
-            <video 
-              src="/videos/duality.mov" 
-              class="w-full h-full object-cover" 
-              autoplay 
-              muted 
-              loop 
-              playsinline
-              webkit-playsinline
-              preload="auto"
-              x-webkit-airplay="allow"
-              playbackRate="0.5"
-            ></video>
-            <div class="absolute inset-0  mix-blend-hue"></div>
-          </div>
-        </Slide>
-        <Slide>
-          <div class="w-screen h-[250px] relative" style="background-color: #000000;">
-            <video 
-              src="/videos/unknownt.mov" 
-              class="w-full h-full object-cover" 
-              autoplay 
-              muted 
-              loop 
-              playsinline
-              webkit-playsinline
-              preload="auto"
-              x-webkit-airplay="allow"
-            ></video>
-            <div class="absolute inset-0 mix-blend-hue"></div>
-          </div>
-        </Slide>
-        <Slide>
-          <div class="w-screen h-[250px]" style="background-color: #000000;">
-            <img src="/images/carousel/2.png" alt="Project Image 2" class="w-full h-full object-cover" />
-          </div>
-        </Slide>
-        <Slide>
-          <div class="w-screen h-[250px]" style="background-color: #000000;">
-            <img src="/images/carousel/3.png" alt="Project Image 3" class="w-full h-full object-cover" />
-          </div>
-        </Slide>
-        <Slide>
-          <div class="w-screen h-[250px]" style="background-color: #000000;">
-            <img src="/images/carousel/4.png" alt="Project Image 4" class="w-full h-full object-cover" />
-          </div>
-        </Slide>
-        <Slide>
-          <div class="w-screen h-[250px]" style="background-color: #000000;">
-            <img src="/images/carousel/5.png" alt="Project Image 5" class="w-full h-full object-cover" />
-          </div>
-        </Slide>
-      </Carousel>
-      <Playlist class="mb-8" />
+      <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </main>
   </div>
 </template>
 
 <style scoped>
-/* Remove the previous transition classes as they're no longer needed */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>
