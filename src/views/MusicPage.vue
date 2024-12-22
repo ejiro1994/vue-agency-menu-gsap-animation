@@ -2,8 +2,10 @@
     <div class="page-container">
         <MediaCarousel ref="carousel" />
         <h1 class="page-title font-kormelink italic mt-4 text-base">Featured String Arrangements</h1>
-        <p class="font-kormelink italic text-base px-4 text-gray-500 mb-8">
-            Bring Your Music to Life with Emotionally Captivating String Arrangements.
+        <p class="font-kormelink italic text-xs px-4 text-gray-500 mb-8">
+            "Discover the power of expertly crafted string arrangements that add depth, beauty and emotion to your musical vision."
+
+
         </p>
         <div class="content-container">
             <Playlist />
