@@ -2,7 +2,9 @@
   <div class="page-container">
     <MediaCarousel ref="carousel" />
     <h1 class="page-title font-kormelink italic mt-4">Live Performances</h1>
-    <Playlist :filter="'LIVE'" />
+    <div class="content-container">
+      <Playlist :filter="'LIVE'" />
+    </div>
   </div>
 </template>
 
@@ -24,8 +26,13 @@ provide('goToSlide', goToSlide)
 <style scoped>
 .page-container {
   padding: 120px 0 40px;
+  width: 100%;
+}
+
+.content-container {
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .page-title {
@@ -33,5 +40,7 @@ provide('goToSlide', goToSlide)
   margin-bottom: 2rem;
   font-weight: 300;
   padding: 0 14px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 </style> 

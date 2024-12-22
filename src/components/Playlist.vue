@@ -171,12 +171,22 @@ const playTrack = (index: number) => {
 
 const updateProgress = () => {
     if (audio.duration) {
-        // Use GSAP to smoothly animate the progress value
+        const progressPercent = (audio.currentTime / audio.duration) * 100
+        // Update both the indicator and line position
         gsap.to(progress, {
-            value: (audio.currentTime / audio.duration) * 100,
+            value: progressPercent,
             duration: 0.1,
             ease: "linear"
-        })
+        });
+        // Animate the progress line
+        const progressLine = document.querySelector('.progress-line') as HTMLElement
+        if (progressLine) {
+            gsap.to(progressLine, {
+                scaleX: progressPercent / 100,
+                duration: 0.1,
+                ease: "linear"
+            });
+        }
     }
 }
 
@@ -209,7 +219,8 @@ onUnmounted(() => {
 
 <style scoped>
 .playlist {
-    max-width: 600px;
+    max-width: 100%;
+    width: 100%;
     margin: 0 auto;
     padding: 14px;
     font-family: serif;
@@ -227,6 +238,7 @@ onUnmounted(() => {
     align-items: center;
     gap: 1rem;
     margin-bottom: 2rem;
+    width: 100%;
 }
 
 .play-button {
@@ -252,7 +264,7 @@ onUnmounted(() => {
 .progress-bar {
     flex-grow: 1;
     height: 1px;
-    background: #ddd;
+    background: #878787;
     position: relative;
     cursor: pointer;
 }
@@ -261,9 +273,11 @@ onUnmounted(() => {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 0;
     height: 100%;
     background: #000;
+    transform-origin: left;
+    transform: scaleX(0);
 }
 
 .progress-indicator {
