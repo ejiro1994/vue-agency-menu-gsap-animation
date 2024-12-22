@@ -102,7 +102,7 @@ const playlist = computed(() => {
     if (!props.filter) return allTracks.value
 
     return allTracks.value.filter(track =>
-        track.title.includes(props.filter)
+        track.title.includes(props.filter || '')
     )
 })
 
