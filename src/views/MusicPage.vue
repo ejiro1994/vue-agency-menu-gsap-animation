@@ -1,8 +1,8 @@
 <template>
     <div class="page-container">
         <MediaCarousel ref="carousel" />
-        <h1 class="page-title font-kormelink italic mt-4"><span class="italic fancy-text">R</span>ecordings</h1>
-        <p class="font-kormelink italic text-lg px-4 text-gray-500 mb-8">
+        <h1 class="page-title font-kormelink italic mt-4"><span class="italic fancy-text text-5xl">R</span>ecordings</h1>
+        <p class="font-kormelink italic text-base px-4 text-gray-500 mb-8">
             I craft emotionally resonant string arrangements that amplify creativity and
             transforms songs.
         </p>
