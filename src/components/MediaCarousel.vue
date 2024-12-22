@@ -5,10 +5,10 @@
     :navigationEnabled="false" 
     :touchDrag="false"
     :mouseDrag="false"
-    class="w-screen px-[14px] mb-8"
+    class="w-full px-[14px] mb-8 overflow-hidden"
   >
     <Slide>
-      <div class="w-screen h-[250px] relative" style="background-color: #000000;">
+      <div class="w-full h-[250px] relative" style="background-color: #000000;">
         <video 
           src="/videos/higher.mov" 
           class="w-full h-full object-cover" 
@@ -24,7 +24,7 @@
       </div>
     </Slide>
     <Slide>
-      <div class="w-screen h-[250px] relative" style="background-color: #000000;">
+      <div class="w-full h-[250px] relative" style="background-color: #000000;">
         <video 
           src="/videos/duality.mov" 
           class="w-full h-full object-cover" 
@@ -41,7 +41,7 @@
       </div>
     </Slide>
     <Slide>
-      <div class="w-screen h-[250px] relative" style="background-color: #000000;">
+      <div class="w-full h-[250px] relative" style="background-color: #000000;">
         <video 
           src="/videos/unknownt.mov" 
           class="w-full h-full object-cover" 
@@ -57,22 +57,22 @@
       </div>
     </Slide>
     <Slide>
-      <div class="w-screen h-[250px]" style="background-color: #000000;">
+      <div class="w-full h-[250px]" style="background-color: #000000;">
         <img src="/images/carousel/2.png" alt="Project Image 2" class="w-full h-full object-cover" />
       </div>
     </Slide>
     <Slide>
-      <div class="w-screen h-[250px]" style="background-color: #000000;">
+      <div class="w-full h-[250px]" style="background-color: #000000;">
         <img src="/images/carousel/3.png" alt="Project Image 3" class="w-full h-full object-cover" />
       </div>
     </Slide>
     <Slide>
-      <div class="w-screen h-[250px]" style="background-color: #000000;">
+      <div class="w-full h-[250px]" style="background-color: #000000;">
         <img src="/images/carousel/4.png" alt="Project Image 4" class="w-full h-full object-cover" />
       </div>
     </Slide>
     <Slide>
-      <div class="w-screen h-[250px]" style="background-color: #000000;">
+      <div class="w-full h-[250px]" style="background-color: #000000;">
         <img src="/images/carousel/5.png" alt="Project Image 5" class="w-full h-full object-cover" />
       </div>
     </Slide>
@@ -101,4 +101,10 @@ const slideTo = (index: number) => {
 }
 
 defineExpose({ slideTo })
-</script> 
+</script>
+
+<style scoped>
+:deep(.carousel__track) {
+  overflow: visible;
+}
+</style>

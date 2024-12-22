@@ -44,7 +44,7 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 gsap.registerPlugin(ScrollToPlugin)
 
 interface Props {
-  filter?: string
+    filter?: string
 }
 
 const props = defineProps<Props>()
@@ -100,8 +100,8 @@ const allTracks = ref<Track[]>([
 
 const playlist = computed(() => {
     if (!props.filter) return allTracks.value
-    
-    return allTracks.value.filter(track => 
+
+    return allTracks.value.filter(track =>
         track.title.includes(props.filter)
     )
 })
@@ -153,16 +153,16 @@ const playTrack = (index: number) => {
     audio.src = playlist.value[index].url
     audio.play()
     isPlaying.value = true
-    
+
     gsap.to(window, {
         duration: 1,
-        scrollTo: { 
-            y: 0, 
+        scrollTo: {
+            y: 0,
             offsetY: 100
         },
         ease: "cubic-bezier(0.45, 0.05, 0.55, 0.95)"
     })
-    
+
     const trackTitle = playlist.value[index].title
     if (goToSlide && trackTitle in trackToSlideMap) {
         goToSlide(trackToSlideMap[trackTitle])
@@ -176,7 +176,7 @@ const updateProgress = () => {
             value: (audio.currentTime / audio.duration) * 100,
             duration: 0.1,
             ease: "linear"
-        });
+        })
     }
 }
 

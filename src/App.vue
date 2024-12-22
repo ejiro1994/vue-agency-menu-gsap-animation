@@ -27,11 +27,6 @@ const projects: Project[] = [
     src: 'live-performances.png',
     color: '#000000'
   },
-  // {
-  //   title: 'scorebook',
-  //   src: 'scorebook.png',
-  //   color: '#706D63'
-  // },
   {
     title: 'about',
     src: 'about.png',
@@ -39,7 +34,8 @@ const projects: Project[] = [
   }
 ]
 
-const handleMouseEnter = () => {
+const handleMouseEnter = (index: number) => {
+  modalState.index = index
   modalCursor.value?.animateIn()
 }
 
@@ -83,7 +79,7 @@ onMounted(() => {
   // Force play all videos for iOS
   const videos = document.querySelectorAll('video')
   videos.forEach(video => {
-    video.play().catch(function(error) {
+    video.play().catch(function (error) {
       console.log("Video play failed:", error)
     })
   })
@@ -121,16 +117,12 @@ const toggleMenu = () => {
     </nav>
     <main class="w-screen mt-[100px]">
       <div ref="menuDrawer" class="fixed inset-0 z-40 bg-white mt-[94px]">
-        <nav class="menu-nav p-14">
-          <router-link 
-            v-for="project in projects" 
-            :key="project.title"
+        <nav class="menu-nav p-8 md:p-14">
+          <router-link v-for="(project, index) in projects" :key="project.title"
             :to="'/' + project.title.toLowerCase().replace(' ', '-')"
-            class="block text-3xl mb-6 font-kormelink hover:opacity-70 transition-opacity uppercase"
-            @mouseenter="handleMouseEnter"
-            @mouseleave="handleMouseLeave"
-            @click="toggleMenu"
-          >
+            class="block text-3xl md:text-4xl lg:text-5xl mb-6 md:mb-8 font-kormelink hover:opacity-70 transition-opacity uppercase relative pl-12 md:pl-16"
+            @mouseenter="() => handleMouseEnter(index)" @mouseleave="handleMouseLeave" @click="toggleMenu">
+            <span class="absolute left-0 top-1 text-xl md:text-2xl opacity-50">0{{ index + 1 }}</span>
             {{ project.title }}
           </router-link>
         </nav>
@@ -155,5 +147,9 @@ const toggleMenu = () => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.menu-nav {
+  font-weight: 300;
 }
 </style>
