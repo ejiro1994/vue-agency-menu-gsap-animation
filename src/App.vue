@@ -110,7 +110,9 @@ const toggleMenu = () => {
 <template>
   <div>
     <nav class="fixed top-0 w-full py-6 flex justify-between items-center z-50 px-[14px] font-kormelink bg-white">
-      <img :src="brandLogo" :width="120" alt="Logo" class="opacity-90" />
+      <router-link to="/">
+        <img :src="brandLogo" :width="120" alt="Logo" class="opacity-90" />
+      </router-link>
       <button class="uppercase text-[20px] font-medium hover:opacity-70 transition-opacity" @click="toggleMenu">
         {{ isMenuOpen ? 'Close' : 'Menu' }}
       </button>
