@@ -11,6 +11,12 @@
                 contemporary sounds, I collaborate with artists, filmmakers, and producers to deliver timeless and
                 innovative compositions that resonate deeply and elevate every project.
             </p>
+            <div class="contact-section mt-12 mb-8">
+                <h2 class="text-xl font-kormelink italic mb-4">Get in Touch</h2>
+                <a href="mailto:hello@ejirolennox.com" class="email-link font-kormelink text-lg hover:opacity-70 transition-opacity uppercase">
+                    hello@ejirolennox.com
+                </a>
+            </div>
         </div>
     </div>
 </template>
@@ -46,5 +52,18 @@
     font-family: 'WTKormelink', serif;
     line-height: 1.6;
     padding: 0 14px;
+}
+
+.contact-section {
+    border-top: 1px solid #eee;
+    padding-top: 2rem;
+}
+
+.email-link {
+    display: inline-block;
+    text-decoration: none;
+    color: #000;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
 }
 </style>

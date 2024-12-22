@@ -73,7 +73,7 @@ const formatTime = (seconds: number): string => {
 
 const allTracks = ref<Track[]>([
     {
-        title: '\u0048IGHER (STRING ARRANGEMENT)',
+        title: 'HIGHER (STRING ARRANGEMENT)',
         artist: 'HIGHLYY',
         duration: '0:38',
         url: '/playlist/higher.m4a'
