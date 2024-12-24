@@ -11,6 +11,18 @@ import gsap from 'gsap'
 
 const modalCursor = ref<typeof ModalCursor>()
 const menuDrawer = ref(null)
+const logoRef = ref(null)
+const splashScreen = ref(null)
+const splashContent = ref(null)
+const loaderCircle = ref(null)
+
+// Create a reactive object for global events
+const globalEvents = reactive({
+  splashScreenComplete: false
+})
+
+// Provide the global events object
+provide('globalEvents', globalEvents)
 
 const projects: Project[] = [
   {
@@ -55,7 +67,53 @@ const isMenuOpen = ref(false)
 const menuTimeline = gsap.timeline({ paused: true })
 
 onMounted(() => {
-  // Set initial states
+  // Create splash screen animation timeline
+  const splashTimeline = gsap.timeline({
+    onComplete: () => {
+      // Remove splash screen from DOM after animation
+      if (splashScreen.value) {
+        splashScreen.value.style.display = 'none'
+        // Signal that splash screen animation is complete
+        globalEvents.splashScreenComplete = true
+      }
+    }
+  })
+
+  // Animate splash content first
+  splashTimeline
+    .from(splashContent.value, {
+      opacity: 0,
+      scale: 0.9,
+      duration: 0.8,
+      ease: 'power3.out'
+    })
+    .to(loaderCircle.value, {
+      strokeDashoffset: 0,
+      duration: 1.5,
+      ease: 'power2.inOut'
+    }, '-=0.4')
+    .to([splashContent.value, loaderCircle.value], {
+      opacity: 0,
+      scale: 1.1,
+      duration: 0.5,
+      ease: 'power3.in'
+    }, '+=0.2')
+    .to(splashScreen.value, {
+      yPercent: -100,
+      duration: 0.8,
+      ease: 'power3.inOut'
+    }, '-=0.3')
+
+  // After splash screen animation, animate the main logo
+  splashTimeline.add(() => {
+    gsap.to(logoRef.value, {
+      opacity: 0.9,
+      duration: 0.5,
+      ease: 'power2.out'
+    })
+  })
+
+  // Set initial states for menu
   gsap.set(menuDrawer.value, {
     yPercent: -100
   })
@@ -118,9 +176,31 @@ provide('goToSlide', goToSlide)
 
 <template>
   <div>
+    <!-- Splash Screen -->
+    <div ref="splashScreen" class="fixed inset-0 z-[60] bg-white flex items-center justify-center">
+      <div ref="splashContent" class="text-center relative">
+        <svg class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] h-[220px]" viewBox="0 0 100 100">
+          <circle
+            ref="loaderCircle"
+            cx="50"
+            cy="50"
+            r="48"
+            fill="none"
+            stroke="#000"
+            opacity="0.7"
+            stroke-width="0.5"
+            stroke-dasharray="301.59"
+            stroke-dashoffset="301.59"
+            class="transform -rotate-90 origin-center"
+          />
+        </svg>
+        <img :src="brandLogo" :width="140" alt="Logo" class="relative z-10" />
+      </div>
+    </div>
+
     <nav class="fixed top-0 w-full py-6 flex justify-between items-center z-50 px-[14px] font-kormelink bg-white">
       <router-link to="/">
-        <img :src="brandLogo" :width="120" alt="Logo" class="opacity-90" />
+        <img ref="logoRef" :src="brandLogo" :width="120" alt="Logo" class="opacity-0" />
       </router-link>
       <button class="uppercase text-[20px] font-medium hover:opacity-70 transition-opacity" @click="toggleMenu">
         {{ isMenuOpen ? 'Close' : 'Menu' }}

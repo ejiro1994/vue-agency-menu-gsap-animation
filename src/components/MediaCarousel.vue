@@ -9,8 +9,8 @@
       :mouseDrag="false"
       class="w-full px-[14px] mb-8 overflow-hidden"
       :class="[
-        'transition-opacity duration-700',
-        allVideosLoaded ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        'transition-opacity duration-1000',
+        showCarousel ? 'opacity-100' : 'opacity-0 pointer-events-none'
       ]"
     >
       <Slide v-for="(slide, index) in slides" :key="index">
@@ -45,13 +45,17 @@
 <script setup lang="ts">
 import { Carousel, Slide } from 'vue3-carousel'
 import 'vue3-carousel/dist/carousel.css'
-import { ref, onMounted, computed, watch, nextTick } from 'vue'
+import { ref, onMounted, computed, watch, nextTick, inject } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const carouselRef = ref()
 const loadedMedia = ref(new Set())
 const videoRefs = ref<HTMLVideoElement[]>([])
+const showCarousel = ref(false)
+
+// Inject the global events object
+const globalEvents = inject('globalEvents') as { splashScreenComplete: boolean }
 
 const slides = [
   { type: 'video', src: '/videos/higher.mov', playbackRate: 1 },
@@ -78,6 +82,7 @@ const setVideoRef = (el: HTMLVideoElement) => {
 const resetLoadingState = async () => {
   loadedMedia.value.clear()
   videoRefs.value = []
+  showCarousel.value = false
   
   await nextTick()
   checkLoadedMedia()
@@ -90,10 +95,20 @@ const handleVideoLoaded = (index: number) => {
       console.log("Video play failed:", error)
     })
   }
+  checkAllMediaLoaded()
 }
 
 const handleImageLoaded = (index: number) => {
   loadedMedia.value.add(`media${index}`)
+  checkAllMediaLoaded()
+}
+
+const checkAllMediaLoaded = () => {
+  if (allVideosLoaded.value && globalEvents.splashScreenComplete) {
+    setTimeout(() => {
+      showCarousel.value = true
+    }, 500) // Reduced delay since we're now waiting for splash screen
+  }
 }
 
 const checkLoadedMedia = () => {
@@ -118,6 +133,13 @@ const checkLoadedMedia = () => {
 watch(() => route.path, async () => {
   await resetLoadingState()
 }, { immediate: true })
+
+// Watch for splash screen completion
+watch(() => globalEvents.splashScreenComplete, (isComplete) => {
+  if (isComplete && allVideosLoaded.value) {
+    checkAllMediaLoaded()
+  }
+})
 
 onMounted(async () => {
   await resetLoadingState()
