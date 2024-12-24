@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { Carousel, Slide } from 'vue3-carousel'
 import 'vue3-carousel/dist/carousel.css'
-import { ref, onMounted, computed, watch, nextTick, inject } from 'vue'
+import { ref, onMounted, computed, watch, nextTick, inject, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -54,8 +54,8 @@ const loadedMedia = ref(new Set())
 const videoRefs = ref<HTMLVideoElement[]>([])
 const showCarousel = ref(false)
 
-// Inject the global events object
-const globalEvents = inject('globalEvents') as { splashScreenComplete: boolean }
+// Inject the global events object with a default value
+const globalEvents = inject('globalEvents', reactive({ splashScreenComplete: false }))
 
 const slides = [
   { type: 'video', src: '/videos/higher.mov', playbackRate: 1 },

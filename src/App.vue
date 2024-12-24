@@ -9,11 +9,13 @@ import { Carousel, Slide } from 'vue3-carousel'
 import 'vue3-carousel/dist/carousel.css'
 import gsap from 'gsap'
 
-// Define globalEvents if not already defined
-const globalEvents = {
-    splashScreenComplete: false,
-    // Add other global events as needed
-}
+// Create a reactive global events object
+const globalEvents = reactive({
+  splashScreenComplete: false
+})
+
+// Provide the global events object to child components
+provide('globalEvents', globalEvents)
 
 const modalCursor = ref<typeof ModalCursor>()
 const menuDrawer = ref(null)
