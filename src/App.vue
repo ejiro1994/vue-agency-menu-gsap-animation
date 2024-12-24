@@ -9,20 +9,18 @@ import { Carousel, Slide } from 'vue3-carousel'
 import 'vue3-carousel/dist/carousel.css'
 import gsap from 'gsap'
 
+// Define globalEvents if not already defined
+const globalEvents = {
+    splashScreenComplete: false,
+    // Add other global events as needed
+}
+
 const modalCursor = ref<typeof ModalCursor>()
 const menuDrawer = ref(null)
 const logoRef = ref(null)
 const splashScreen = ref(null)
 const splashContent = ref(null)
 const loaderCircle = ref(null)
-
-// Create a reactive object for global events
-const globalEvents = reactive({
-  splashScreenComplete: false
-})
-
-// Provide the global events object
-provide('globalEvents', globalEvents)
 
 const projects: Project[] = [
   {
@@ -72,7 +70,7 @@ onMounted(() => {
     onComplete: () => {
       // Remove splash screen from DOM after animation
       if (splashScreen.value) {
-        splashScreen.value.style.display = 'none'
+        (splashScreen.value as HTMLElement).style.display = 'none'
         // Signal that splash screen animation is complete
         globalEvents.splashScreenComplete = true
       }
