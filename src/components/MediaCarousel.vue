@@ -7,14 +7,17 @@
       :navigationEnabled="false" 
       :touchDrag="false"
       :mouseDrag="false"
-      class="w-full px-[14px] mb-8 overflow-hidden transition-opacity duration-500"
-      :class="{ 'opacity-0': !allVideosLoaded, 'opacity-100': allVideosLoaded }"
+      class="w-full px-[14px] mb-8 overflow-hidden"
+      :class="[
+        'transition-opacity duration-700',
+        allVideosLoaded ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      ]"
     >
-      <Slide>
-        <div class="w-full h-[250px] relative" style="background-color: #000000;">
-          <video 
-            ref="video1"
-            src="/videos/higher.mov" 
+      <Slide v-for="(slide, index) in slides" :key="index">
+        <div class="w-full h-[250px] relative" :style="{ backgroundColor: '#000000' }">
+          <video v-if="slide.type === 'video'"
+            :ref="setVideoRef"
+            :src="slide.src" 
             class="w-full h-full object-cover" 
             autoplay 
             muted 
@@ -23,86 +26,16 @@
             webkit-playsinline
             preload="auto"
             x-webkit-airplay="allow"
-            @loadeddata="handleVideoLoaded('video1')"
+            :playbackRate="slide.playbackRate"
+            @loadeddata="() => handleVideoLoaded(index)"
           ></video>
-          <div class="absolute inset-0 mix-blend-hue"></div>
-        </div>
-      </Slide>
-      <Slide>
-        <div class="w-full h-[250px] relative" style="background-color: #000000;">
-          <video 
-            ref="video2"
-            src="/videos/duality.mov" 
-            class="w-full h-full object-cover" 
-            autoplay 
-            muted 
-            loop 
-            playsinline
-            webkit-playsinline
-            preload="auto"
-            x-webkit-airplay="allow"
-            playbackRate="0.5"
-            @loadeddata="handleVideoLoaded('video2')"
-          ></video>
-          <div class="absolute inset-0 mix-blend-hue"></div>
-        </div>
-      </Slide>
-      <Slide>
-        <div class="w-full h-[250px] relative" style="background-color: #000000;">
-          <video 
-            ref="video3"
-            src="/videos/unknownt.mov" 
-            class="w-full h-full object-cover" 
-            autoplay 
-            muted 
-            loop 
-            playsinline
-            webkit-playsinline
-            preload="auto"
-            x-webkit-airplay="allow"
-            @loadeddata="handleVideoLoaded('video3')"
-          ></video>
-          <div class="absolute inset-0 mix-blend-hue"></div>
-        </div>
-      </Slide>
-      <Slide>
-        <div class="w-full h-[250px]" style="background-color: #000000;">
-          <img 
-            src="/images/carousel/2.png" 
-            alt="Project Image 2" 
+          <img v-else
+            :src="slide.src" 
+            :alt="slide.alt" 
             class="w-full h-full object-cover"
-            @load="handleImageLoaded('image1')" 
+            @load="() => handleImageLoaded(index)" 
           />
-        </div>
-      </Slide>
-      <Slide>
-        <div class="w-full h-[250px]" style="background-color: #000000;">
-          <img 
-            src="/images/carousel/3.png" 
-            alt="Project Image 3" 
-            class="w-full h-full object-cover"
-            @load="handleImageLoaded('image2')" 
-          />
-        </div>
-      </Slide>
-      <Slide>
-        <div class="w-full h-[250px]" style="background-color: #000000;">
-          <img 
-            src="/images/carousel/4.png" 
-            alt="Project Image 4" 
-            class="w-full h-full object-cover"
-            @load="handleImageLoaded('image3')" 
-          />
-        </div>
-      </Slide>
-      <Slide>
-        <div class="w-full h-[250px]" style="background-color: #000000;">
-          <img 
-            src="/images/carousel/5.png" 
-            alt="Project Image 5" 
-            class="w-full h-full object-cover"
-            @load="handleImageLoaded('image4')" 
-          />
+          <div v-if="slide.type === 'video'" class="absolute inset-0 mix-blend-hue"></div>
         </div>
       </Slide>
     </Carousel>
@@ -112,46 +45,82 @@
 <script setup lang="ts">
 import { Carousel, Slide } from 'vue3-carousel'
 import 'vue3-carousel/dist/carousel.css'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch, nextTick } from 'vue'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 const carouselRef = ref()
 const loadedMedia = ref(new Set())
-const totalMediaCount = 7 // 3 videos + 4 images
+const videoRefs = ref<HTMLVideoElement[]>([])
+
+const slides = [
+  { type: 'video', src: '/videos/higher.mov', playbackRate: 1 },
+  { type: 'video', src: '/videos/duality.mov', playbackRate: 0.5 },
+  { type: 'video', src: '/videos/unknownt.mov', playbackRate: 1 },
+  { type: 'image', src: '/images/carousel/2.png', alt: 'Project Image 2' },
+  { type: 'image', src: '/images/carousel/3.png', alt: 'Project Image 3' },
+  { type: 'image', src: '/images/carousel/4.png', alt: 'Project Image 4' },
+  { type: 'image', src: '/images/carousel/5.png', alt: 'Project Image 5' }
+]
+
+const totalMediaCount = slides.length
 
 const allVideosLoaded = computed(() => {
   return loadedMedia.value.size === totalMediaCount
 })
 
-const handleVideoLoaded = (videoId: string) => {
-  loadedMedia.value.add(videoId)
-  const video = document.querySelector(`[ref="${videoId}"]`) as HTMLVideoElement
-  if (video) {
-    video.play().catch(function(error) {
+const setVideoRef = (el: HTMLVideoElement) => {
+  if (el) {
+    videoRefs.value.push(el)
+  }
+}
+
+const resetLoadingState = async () => {
+  loadedMedia.value.clear()
+  videoRefs.value = []
+  
+  await nextTick()
+  checkLoadedMedia()
+}
+
+const handleVideoLoaded = (index: number) => {
+  loadedMedia.value.add(`media${index}`)
+  if (videoRefs.value[index]) {
+    videoRefs.value[index].play().catch(function(error) {
       console.log("Video play failed:", error)
     })
   }
 }
 
-const handleImageLoaded = (imageId: string) => {
-  loadedMedia.value.add(imageId)
+const handleImageLoaded = (index: number) => {
+  loadedMedia.value.add(`media${index}`)
 }
 
-onMounted(() => {
-  // Check if videos are already loaded (cached)
-  const videos = document.querySelectorAll('video')
-  videos.forEach((video, index) => {
-    if (video.readyState >= 4) { // HAVE_ENOUGH_DATA
-      handleVideoLoaded(`video${index + 1}`)
+const checkLoadedMedia = () => {
+  // Check videos and images
+  slides.forEach((slide, index) => {
+    if (slide.type === 'video') {
+      const video = videoRefs.value[index]
+      if (video && video.readyState >= 4) {
+        handleVideoLoaded(index)
+      }
+    } else {
+      const img = new Image()
+      img.src = slide.src
+      if (img.complete) {
+        handleImageLoaded(index)
+      }
     }
   })
+}
 
-  // Check if images are already loaded (cached)
-  const images = document.querySelectorAll('img')
-  images.forEach((image, index) => {
-    if (image.complete) {
-      handleImageLoaded(`image${index + 1}`)
-    }
-  })
+// Watch for route changes
+watch(() => route.path, async () => {
+  await resetLoadingState()
+}, { immediate: true })
+
+onMounted(async () => {
+  await resetLoadingState()
 })
 
 const slideTo = (index: number) => {
