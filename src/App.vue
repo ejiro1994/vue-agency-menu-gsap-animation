@@ -10,6 +10,7 @@ import 'vue3-carousel/dist/carousel.css'
 import gsap from 'gsap'
 
 const modalCursor = ref<typeof ModalCursor>()
+const menuDrawer = ref(null)
 
 const projects: Project[] = [
   {
@@ -48,38 +49,41 @@ const modalState = reactive({
   index: 0
 })
 
-const carouselRef = ref()
-
-const handlePrev = () => {
-  carouselRef.value?.prev()
-  console.log('Previous button clicked')
-}
-
-const handleNext = () => {
-  carouselRef.value?.next()
-  console.log('Next button clicked')
-}
-
-const goToSlide = (slideIndex: number) => {
-  carouselRef.value?.slideTo(slideIndex)
-}
-
-provide('goToSlide', goToSlide)
-
 const isMenuOpen = ref(false)
 
-const menuDrawer = ref(null)
+// Initialize GSAP timeline
+const menuTimeline = gsap.timeline({ paused: true })
 
-// Initialize GSAP by setting initial state
 onMounted(() => {
+  // Set initial states
   gsap.set(menuDrawer.value, {
     yPercent: -100
   })
 
+  gsap.set('.menu-item', {
+    opacity: 0,
+    x: -32
+  })
+
+  // Create menu animation timeline
+  menuTimeline
+    .to(menuDrawer.value, {
+      yPercent: 0,
+      duration: 0.7,
+      ease: 'power3.inOut'
+    })
+    .to('.menu-item', {
+      opacity: 1,
+      x: 0,
+      duration: 0.5,
+      stagger: 0.1,
+      ease: 'power3.out'
+    }, '-=0.3')
+
   // Force play all videos for iOS
   const videos = document.querySelectorAll('video')
   videos.forEach(video => {
-    video.play().catch(function (error) {
+    video.play().catch(function(error) {
       console.log("Video play failed:", error)
     })
   })
@@ -89,22 +93,27 @@ const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 
   if (isMenuOpen.value) {
-    // Animate menu in
-    gsap.to(menuDrawer.value, {
-      yPercent: 0,
-      duration: 0.7,
-      ease: 'power3.inOut'
-    })
+    menuTimeline.play()
   } else {
-    // Animate menu out
-    gsap.to(menuDrawer.value, {
-      yPercent: -100,
-      duration: 0.7,
-      ease: 'power3.inOut'
-    })
+    menuTimeline.reverse()
   }
 }
 
+const carouselRef = ref()
+
+const handlePrev = () => {
+  carouselRef.value?.prev()
+}
+
+const handleNext = () => {
+  carouselRef.value?.next()
+}
+
+const goToSlide = (slideIndex: number) => {
+  carouselRef.value?.slideTo(slideIndex)
+}
+
+provide('goToSlide', goToSlide)
 </script>
 
 <template>
@@ -122,8 +131,10 @@ const toggleMenu = () => {
         <nav class="menu-nav p-8 md:p-14">
           <router-link v-for="(project, index) in projects" :key="project.title"
             :to="'/' + project.title.toLowerCase().replace(' ', '-')"
-            class="block text-3xl md:text-4xl lg:text-5xl mb-6 md:mb-8 font-kormelink hover:opacity-70 transition-opacity uppercase relative border-b-[1px] pt-4 pb-4"
-            @mouseenter="() => handleMouseEnter(index)" @mouseleave="handleMouseLeave" @click="toggleMenu">
+            class="menu-item block text-3xl md:text-4xl lg:text-5xl mb-6 md:mb-8 font-kormelink hover:opacity-70 transition-opacity uppercase relative border-b-[1px] pt-4 pb-4 opacity-0 -translate-x-8"
+            @mouseenter="() => window.innerWidth >= 768 && handleMouseEnter(index)" 
+            @mouseleave="() => window.innerWidth >= 768 && handleMouseLeave" 
+            @click="toggleMenu">
             <div class="flex items-center">
               <!-- <span class="text-sm md:text-sm opacity-50 w-[60px]">(0{{ index + 1 }})</span> -->
               <h2 class="flex-1">{{ project.title }}</h2>
