@@ -43,7 +43,7 @@ const fadeInImage = (event: Event) => {
     // Ensure the class is added after the image is fully loaded
     setTimeout(() => {
         img.classList.add('visible');
-    }, 2000); // 2-second delay before adding the class
+    }, 1000); // 2-second delay before adding the class
 };
 </script>
 
@@ -104,5 +104,12 @@ const fadeInImage = (event: Event) => {
 
 .visible {
     opacity: 1;
+}
+
+.fancy-text {
+    font-style: italic;
+    font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
+    -webkit-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
+    -moz-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
 }
 </style>
