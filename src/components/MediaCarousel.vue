@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import { Carousel, Slide } from 'vue3-carousel'
 import 'vue3-carousel/dist/carousel.css'
-import { ref, onMounted, computed, watch, nextTick, inject, type Ref } from 'vue'
+import { ref, onMounted, computed, watch, nextTick, inject, type Ref, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -74,6 +74,7 @@ const allMediaLoaded = computed(() => {
 
 const resetLoadingState = async () => {
   loadedMedia.value.clear()
+  loadedCount.value = 0
   videoRefs.value = []
   showCarousel.value = false
   
@@ -82,7 +83,11 @@ const resetLoadingState = async () => {
 }
 
 const handleMediaLoaded = (index: number) => {
-  loadedCount.value++
+  if (!loadedMedia.value.has(index)) {
+    loadedMedia.value.add(index)
+    loadedCount.value++
+    checkAllMediaLoaded()
+  }
 }
 
 const checkAllMediaLoaded = () => {
@@ -94,10 +99,11 @@ const checkAllMediaLoaded = () => {
 }
 
 const checkLoadedMedia = () => {
-  // Check videos and images
   slides.forEach((slide, index) => {
+    if (loadedMedia.value.has(index)) return // Skip if already loaded
+
     if (slide.type === 'video') {
-      const video = videoRefs.value[index]
+      const video = document.querySelector(`video[src="${slide.src}"]`) as HTMLVideoElement
       if (video && video.readyState >= 4) {
         handleMediaLoaded(index)
       }
@@ -106,6 +112,8 @@ const checkLoadedMedia = () => {
       img.src = slide.src
       if (img.complete) {
         handleMediaLoaded(index)
+      } else {
+        img.onload = () => handleMediaLoaded(index)
       }
     }
   })
@@ -123,8 +131,24 @@ watch(() => globalEvents.splashScreenComplete, (isComplete) => {
   }
 })
 
+// Add a periodic check for loaded media
+let checkInterval: number | null = null
+
 onMounted(async () => {
   await resetLoadingState()
+  // Add periodic checking for media loading
+  checkInterval = window.setInterval(() => {
+    if (!allMediaLoaded.value) {
+      checkLoadedMedia()
+    }
+  }, 1000) // Check every second
+})
+
+// Clean up the interval when component is unmounted
+onUnmounted(() => {
+  if (checkInterval !== null) {
+    clearInterval(checkInterval)
+  }
 })
 
 const slideTo = (index: number) => {
