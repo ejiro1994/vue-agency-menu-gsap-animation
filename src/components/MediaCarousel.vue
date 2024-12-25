@@ -39,6 +39,7 @@ const videoRefs = ref<HTMLVideoElement[]>([])
 const showCarousel = ref(false)
 const mediaCache = ref<Map<string, HTMLVideoElement | HTMLImageElement>>(new Map())
 const mediaContainers = ref<(HTMLElement | null)[]>([])
+const currentVideoElement = ref<HTMLVideoElement | null>(null)
 
 interface GlobalEvents {
   splashScreenComplete: boolean
@@ -102,6 +103,7 @@ const initializeVideo = (index: number) => {
 
   container.innerHTML = ''
   container.appendChild(video)
+  currentVideoElement.value = video
 }
 
 const resetLoadingState = async () => {
@@ -177,12 +179,28 @@ watch(() => route.path, async (newPath, oldPath) => {
     // Moving between carousel routes - don't reset
     return
   }
+
+  if (currentVideoElement.value) {
+    try {
+      await currentVideoElement.value.play()
+    } catch (error) {
+      console.error('Error playing video:', error)
+    }
+  }
 }, { immediate: true })
 
 // Watch for splash screen completion
-watch(() => globalEvents.splashScreenComplete, (isComplete) => {
+watch(() => globalEvents.splashScreenComplete, async (isComplete) => {
   if (isComplete && allMediaLoaded.value) {
     checkAllMediaLoaded()
+    // Try to play the current video
+    if (currentVideoElement.value) {
+      try {
+        await currentVideoElement.value.play()
+      } catch (error) {
+        console.error('Error playing video:', error)
+      }
+    }
   }
 })
 
