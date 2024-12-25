@@ -1,6 +1,5 @@
 <template>
     <div class="page-container">
-        <MediaCarousel ref="carousel" />
         <h1 class="page-title font-kormelink italic mt-4"><span class="italic font-feature-[fancy]">L</span>ive Performances</h1>
         <div class="content-container">
             <Playlist :filter="'LIVE'" />
@@ -10,24 +9,17 @@
 
 <script setup lang="ts">
 import Playlist from '../components/Playlist.vue'
-import MediaCarousel from '../components/MediaCarousel.vue'
-import { ref, provide } from 'vue'
+import { inject } from 'vue'
 
-const carousel = ref()
-
-// Provide the goToSlide function for the playlist component
-const goToSlide = (slideIndex: number) => {
-    carousel.value?.slideTo(slideIndex)
-}
-
-provide('goToSlide', goToSlide)
+// Use the goToSlide from App.vue
+const goToSlide = inject('goToSlide')
 </script>
 
 <style scoped>
-.page-container {
+/* .page-container {
     padding: 120px 0 40px;
     width: 100%;
-}
+} */
 
 .content-container {
     width: 100%;

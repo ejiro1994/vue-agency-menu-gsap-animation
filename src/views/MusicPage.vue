@@ -1,39 +1,29 @@
 <template>
-    <div class="page-container">
-        <MediaCarousel ref="carousel" />
-        <h1 class="page-title font-kormelink italic mt-4 text-base">Featured String Arrangements</h1>
-        <p class="font-kormelink italic text-xs px-4 text-gray-500 mb-8">
-            "Discover the power of expertly crafted string arrangements that add depth, beauty and emotion to your
-            musical vision."
-
-
-        </p>
-        <div class="content-container">
-            <Playlist />
-        </div>
+  <PageLayout>
+    <h1 class="page-title font-kormelink italic mt-4 text-base">Featured String Arrangements</h1>
+    <p class="font-kormelink italic text-xs px-4 text-gray-500 mb-8">
+      "Discover the power of expertly crafted string arrangements that add depth, beauty and emotion to your
+      musical vision."
+    </p>
+    <div class="content-container">
+      <Playlist />
     </div>
+  </PageLayout>
 </template>
 
 <script setup lang="ts">
+import PageLayout from '@/layouts/PageLayout.vue'
 import Playlist from '../components/Playlist.vue'
-import MediaCarousel from '../components/MediaCarousel.vue'
-import { ref, provide } from 'vue'
+import { inject } from 'vue'
 
-const carousel = ref()
-
-// Provide the goToSlide function for the playlist component
-const goToSlide = (slideIndex: number) => {
-    carousel.value?.slideTo(slideIndex)
-}
-
-provide('goToSlide', goToSlide)
+const goToSlide = inject('goToSlide')
 </script>
 
 <style scoped>
-.page-container {
+/* .page-container {
     padding: 50px 0 40px;
     width: 100%;
-}
+} */
 
 .content-container {
     width: 100%;

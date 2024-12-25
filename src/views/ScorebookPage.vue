@@ -19,11 +19,11 @@
 </script>
 
 <style scoped>
-.page-container {
+/* .page-container {
   padding: 120px 14px 40px;
   max-width: 800px;
   margin: 0 auto;
-}
+} */
 
 .page-title {
   font-size: 2.5rem;

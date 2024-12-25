@@ -3,11 +3,13 @@ import ListOfItems from './components/List/ListOfItems.vue'
 import type { Project } from './types/Project'
 import ModalCursor from './components/ModalCursor.vue'
 import Playlist from './components/Playlist.vue'
-import { reactive, ref, provide, onMounted } from 'vue'
+import { reactive, ref, provide, onMounted, computed } from 'vue'
 import brandLogo from './assets/images/brand-logo.svg'
 import { Carousel, Slide } from 'vue3-carousel'
 import 'vue3-carousel/dist/carousel.css'
 import gsap from 'gsap'
+import { useRoute } from 'vue-router'
+import MediaCarousel from '@/components/MediaCarousel.vue'
 
 // Create a reactive global events object
 const globalEvents = reactive({
@@ -65,6 +67,14 @@ const isMenuOpen = ref(false)
 
 // Initialize GSAP timeline
 const menuTimeline = gsap.timeline({ paused: true })
+
+const route = useRoute()
+const carouselRef = ref<InstanceType<typeof MediaCarousel> | null>(null)
+
+// Show carousel only on routes that need it
+const showCarousel = computed(() => {
+  return ['/music', '/film-scores', '/live-performances'].includes(route.path)
+})
 
 onMounted(() => {
   // Create splash screen animation timeline
@@ -171,15 +181,13 @@ const toggleMenu = () => {
   }
 }
 
-const carouselRef = ref()
+// const handlePrev = () => {
+//   carouselRef.value?.prev()
+// }
 
-const handlePrev = () => {
-  carouselRef.value?.prev()
-}
-
-const handleNext = () => {
-  carouselRef.value?.next()
-}
+// const handleNext = () => {
+//   carouselRef.value?.next()
+// }
 
 const goToSlide = (slideIndex: number) => {
   carouselRef.value?.slideTo(slideIndex)
@@ -234,6 +242,12 @@ provide('goToSlide', goToSlide)
           />
         </div>
       </div>
+      
+      <MediaCarousel 
+      v-show="showCarousel" 
+      ref="carouselRef"
+      class="mt-[150px]"
+    />
 
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
@@ -241,6 +255,8 @@ provide('goToSlide', goToSlide)
         </transition>
       </router-view>
     </main>
+
+  
   </div>
 </template>
 

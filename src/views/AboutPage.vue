@@ -1,8 +1,6 @@
 <template>
     <div class="page-container">
-        <div class="image-container mb-8">
-            <img src="/images/social-media-image.jpg" alt="Social Media" class="max-w-full w-auto h-auto" />
-        </div>
+        
         <h1 class="page-title font-kormelink italic mt-4">About</h1>
         <div class="content">
             <p class="mb-4 uppercase">
@@ -11,6 +9,9 @@
                 contemporary sounds, I collaborate with artists, filmmakers, and producers to deliver timeless and
                 innovative compositions that resonate deeply and elevate every project.
             </p>
+            <div class="image-container mb-8">
+                <img src="/images/social-media-image.jpg" alt="Social Media" class="max-w-full w-auto h-auto fade-in" @load="fadeInImage" />
+            </div>
             <div class="contact-section mt-12 mb-8">
                 <h2 class="text-xl font-kormelink italic mb-6">Get in Touch</h2>
                 <div class="contact-links space-y-4">
@@ -35,6 +36,15 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+
+const fadeInImage = (event: Event) => {
+    const img = event.target as HTMLImageElement;
+    // Ensure the class is added after the image is fully loaded
+    setTimeout(() => {
+        img.classList.add('visible');
+    }, 2000); // 2-second delay before adding the class
+};
 </script>
 
 <style scoped>
@@ -85,5 +95,14 @@
         flex-direction: column;
         gap: 1rem;
     }
+}
+
+.fade-in {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.visible {
+    opacity: 1;
 }
 </style>

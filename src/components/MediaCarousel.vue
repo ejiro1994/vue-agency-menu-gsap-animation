@@ -161,8 +161,22 @@ const checkLoadedMedia = () => {
 }
 
 // Watch for route changes
-watch(() => route.path, async () => {
-  await resetLoadingState()
+watch(() => route.path, async (newPath, oldPath) => {
+  // Only reset if we're moving to/from a route that doesn't use the carousel
+  const carouselRoutes = ['/music', '/film-scores', '/live-performances']
+  const wasOnCarouselRoute = carouselRoutes.includes(oldPath || '')
+  const isOnCarouselRoute = carouselRoutes.includes(newPath || '')
+
+  if (isOnCarouselRoute && !wasOnCarouselRoute) {
+    // Coming to a carousel route from non-carousel route
+    await resetLoadingState()
+  } else if (!isOnCarouselRoute && wasOnCarouselRoute) {
+    // Leaving carousel routes
+    showCarousel.value = false
+  } else if (isOnCarouselRoute && wasOnCarouselRoute) {
+    // Moving between carousel routes - don't reset
+    return
+  }
 }, { immediate: true })
 
 // Watch for splash screen completion
