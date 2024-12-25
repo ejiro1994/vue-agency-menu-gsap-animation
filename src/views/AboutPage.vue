@@ -49,7 +49,7 @@ const fadeInImage = (event: Event) => {
 
 <style scoped>
 .page-container {
-    padding: 120px 0 40px;
+    padding: 0px 0 40px;
     max-width: 800px;
     margin: 0 auto;
 }
