@@ -13,6 +13,7 @@ defineProps<{
     active: boolean
     index: number
   }
+  isMenuOpen: boolean
 }>()
 
 const x = ref(0)
@@ -51,10 +52,10 @@ onMounted(() => {
   useEventListener(window, 'mousemove', (e) => {
     x.value = e.clientX
     y.value = e.clientY - menuOffset
-    
+
     modalX(e.clientX)
     modalY(e.clientY - menuOffset)
-    
+
     cursorX(e.clientX)
     cursorY(e.clientY - menuOffset)
   })
@@ -62,22 +63,19 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    ref="modalContainer"
-    class="h-[350px] w-[400px] flex overflow-hidden items-center justify-center bg-green-100 scale-0 absolute top-0 left-0 z-10 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+  <div ref="modalContainer"
+    class="h-[350px] w-[400px] flex overflow-hidden items-center justify-center bg-green-100 scale-0 absolute top-0 left-0 z-10 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+    :class="{ 'hidden': !isMenuOpen }">
     <div :style="{ top: modalState.index * -100 + '%' }" class="ease-cubic-bezier-custom">
-      <div
-        v-for="({ src, color }, index) in projects"
-        :key="`modal_${index}`"
-        class="h-full w-full flex justify-center items-center"
-        :style="{ backgroundColor: color }">
+      <div v-for="({ src, color }, index) in projects" :key="`modal_${index}`"
+        class="h-full w-full flex justify-center items-center" :style="{ backgroundColor: color }">
         <img :src="`/images/${src}`" alt="image" class="w-[300px]" />
       </div>
     </div>
   </div>
-  <div
-    ref="cursor"
-    class="w-[80px] h-[80px] scale-0 rounded-full bg-[#455CE9] text-white flex items-center justify-center text-sm font-light pointer-events-none fixed top-0 left-0 z-20 -translate-x-1/2 -translate-y-1/2">
+  <div ref="cursor"
+    class="w-[80px] h-[80px] scale-0 rounded-full bg-[#455CE9] text-white flex items-center justify-center text-sm font-light pointer-events-none fixed top-0 left-0 z-20 -translate-x-1/2 -translate-y-1/2"
+    :class="{ 'hidden': !isMenuOpen }">
     Listen
   </div>
 </template>

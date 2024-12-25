@@ -35,13 +35,13 @@
 <script setup lang="ts">
 import { Carousel, Slide } from 'vue3-carousel'
 import 'vue3-carousel/dist/carousel.css'
-import { ref, onMounted, computed, watch, nextTick, inject, reactive, type ComponentPublicInstance } from 'vue'
+import { ref, onMounted, computed, watch, nextTick, inject, type Ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const carouselRef = ref()
-const loadedMedia = ref(new Set())
-const videoRefs = ref<(el: HTMLVideoElement | null) => void>([])
+const carouselRef = ref<InstanceType<typeof Carousel> | null>(null)
+const loadedMedia = ref<Set<number>>(new Set())
+const videoRefs = ref<HTMLVideoElement[]>([])
 const showCarousel = ref(false)
 
 interface GlobalEvents {
@@ -50,7 +50,14 @@ interface GlobalEvents {
 
 const globalEvents = inject<GlobalEvents>('globalEvents', { splashScreenComplete: false })
 
-const slides = [
+interface MediaSlide {
+  type: 'video' | 'image'
+  src: string
+  playbackRate?: number
+  alt?: string
+}
+
+const slides: MediaSlide[] = [
   { type: 'video', src: '/videos/higher.mov', playbackRate: 1 },
   { type: 'video', src: '/videos/duality.mov', playbackRate: 0.5 },
   { type: 'video', src: '/videos/unknownt.mov', playbackRate: 1 },
@@ -60,18 +67,10 @@ const slides = [
   { type: 'image', src: '/images/carousel/5.png', alt: 'Project Image 5' }
 ]
 
-const totalMediaCount = slides.length
-
 const loadedCount = ref(0)
 const allMediaLoaded = computed(() => {
   return loadedCount.value === slides.length && globalEvents.splashScreenComplete
 })
-
-const setVideoRef = (el: HTMLVideoElement | null) => {
-  if (el) {
-    videoRefs.value.push(el)
-  }
-}
 
 const resetLoadingState = async () => {
   loadedMedia.value.clear()

@@ -218,17 +218,20 @@ provide('goToSlide', goToSlide)
           <router-link v-for="(project, index) in projects" :key="project.title"
             :to="'/' + project.title.toLowerCase().replace(' ', '-')"
             class="menu-item block text-3xl md:text-4xl lg:text-5xl mb-6 md:mb-8 font-kormelink hover:opacity-70 transition-opacity uppercase relative border-b-[1px] pt-4 pb-4 opacity-0 -translate-x-8"
-            @mouseenter="() => typeof window !== 'undefined' && window.innerWidth >= 768 && handleMouseEnter(index)" 
-            @mouseleave="() => typeof window !== 'undefined' && window.innerWidth >= 768 && handleMouseLeave" 
-            @click="toggleMenu">
+            @mouseenter="() => handleMouseEnter(index)" @mouseleave="() => handleMouseLeave" @click="toggleMenu">
             <div class="flex items-center">
-              <span class="text-sm md:text-sm opacity-50 w-[60px]">(0{{ index + 1 }})</span>
+              <!-- <span class="text-sm md:text-sm opacity-50 w-[60px]">(0{{ index + 1 }})</span> -->
               <h2 class="flex-1">{{ project.title }}</h2>
             </div>
           </router-link>
         </nav>
         <div class="hidden md:block">
-          <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" />
+          <ModalCursor 
+            ref="modalCursor" 
+            :projects="projects" 
+            :modalState="modalState"
+            :isMenuOpen="isMenuOpen"
+          />
         </div>
       </div>
 
