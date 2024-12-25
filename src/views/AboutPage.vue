@@ -6,7 +6,7 @@
             <p class="mb-4 uppercase">
                 I'm a string arranger and producer from West London, dedicated to creating emotive, bespoke arrangements
                 that bring stories to life through music. With a deep passion for blending classical traditions with
-                contemporary sounds, I collaborate with artists, filmmakers, and producers to deliver timeless and
+                contemporary sounds, I collaborate with artists, filmmakers and producers to deliver timeless and
                 innovative compositions that resonate deeply and elevate every project.
             </p>
             <div class="image-container mb-8">
