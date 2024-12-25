@@ -155,7 +155,7 @@ onMounted(() => {
   // Force play all videos for iOS
   const videos = document.querySelectorAll('video')
   videos.forEach(video => {
-    video.play().catch(function(error) {
+    video.play().catch(function (error) {
       console.log("Video play failed:", error)
     })
   })
@@ -193,20 +193,10 @@ provide('goToSlide', goToSlide)
     <!-- Splash Screen -->
     <div ref="splashScreen" class="fixed inset-0 z-[60] bg-white flex items-center justify-center">
       <div ref="splashContent" class="text-center relative">
-        <svg class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] h-[220px]" viewBox="0 0 100 100">
-          <circle
-            ref="loaderCircle"
-            cx="50"
-            cy="50"
-            r="48"
-            fill="none"
-            stroke="#000"
-            opacity="0.7"
-            stroke-width="0.5"
-            stroke-dasharray="301.59"
-            stroke-dashoffset="301.59"
-            class="transform -rotate-90 origin-center"
-          />
+        <svg class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] h-[220px]"
+          viewBox="0 0 100 100">
+          <circle ref="loaderCircle" cx="50" cy="50" r="48" fill="none" stroke="#000" opacity="0.7" stroke-width="0.5"
+            stroke-dasharray="301.59" stroke-dashoffset="301.59" class="transform -rotate-90 origin-center" />
         </svg>
         <img :src="brandLogo" :width="140" alt="Logo" class="relative z-10" />
       </div>
@@ -228,9 +218,7 @@ provide('goToSlide', goToSlide)
           <router-link v-for="(project, index) in projects" :key="project.title"
             :to="'/' + project.title.toLowerCase().replace(' ', '-')"
             class="menu-item block text-3xl md:text-4xl lg:text-5xl mb-6 md:mb-8 font-kormelink hover:opacity-70 transition-opacity uppercase relative border-b-[1px] pt-4 pb-4 opacity-0 -translate-x-8"
-            @mouseenter="() => typeof window !== 'undefined' && window.innerWidth >= 768 && handleMouseEnter(index)" 
-            @mouseleave="() => typeof window !== 'undefined' && window.innerWidth >= 768 && handleMouseLeave" 
-            @click="toggleMenu">
+            @mouseenter="() => handleMouseEnter(index)" @mouseleave="() => handleMouseLeave" @click="toggleMenu">
             <div class="flex items-center">
               <span class="text-sm md:text-sm opacity-50 w-[60px]">(0{{ index + 1 }})</span>
               <h2 class="flex-1">{{ project.title }}</h2>
