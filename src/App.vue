@@ -181,13 +181,6 @@ const toggleMenu = () => {
   }
 }
 
-// const handlePrev = () => {
-//   carouselRef.value?.prev()
-// }
-
-// const handleNext = () => {
-//   carouselRef.value?.next()
-// }
 
 const goToSlide = (slideIndex: number) => {
   carouselRef.value?.slideTo(slideIndex)
@@ -211,7 +204,7 @@ provide('goToSlide', goToSlide)
     </div>
 
     <nav class="fixed top-0 w-full py-6 flex justify-between items-center z-50 px-[14px] font-kormelink bg-white">
-      <router-link to="/">
+      <router-link to="/" @click="toggleMenu">
         <div ref="logoRef">
           <img :src="brandLogo" :width="120" alt="Logo" class="opacity-90" />
         </div>
