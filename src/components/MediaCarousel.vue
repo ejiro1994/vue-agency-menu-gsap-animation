@@ -12,7 +12,7 @@
       <Slide v-for="(slide, index) in slides" :key="slide.src">
         <div class="w-full h-[250px] relative bg-black">
           <template v-if="slide.type === 'video'">
-            <div ref="mediaContainers" :data-index="index"></div>
+            <div :ref="el => setMediaContainer(el as HTMLElement, index)" class="w-full h-full"></div>
           </template>
           <img v-else
             :src="slide.src" 
@@ -38,7 +38,7 @@ const loadedMedia = ref<Set<number>>(new Set())
 const videoRefs = ref<HTMLVideoElement[]>([])
 const showCarousel = ref(false)
 const mediaCache = ref<Map<string, HTMLVideoElement | HTMLImageElement>>(new Map())
-const mediaContainers = ref<HTMLElement[]>([])
+const mediaContainers = ref<(HTMLElement | null)[]>([])
 
 interface GlobalEvents {
   splashScreenComplete: boolean
@@ -68,32 +68,40 @@ const allMediaLoaded = computed(() => {
   return loadedCount.value === slides.length && globalEvents.splashScreenComplete
 })
 
-const initializeVideos = () => {
-  slides.forEach((slide, index) => {
-    if (slide.type === 'video') {
-      const container = mediaContainers.value[index]
-      if (!container) return
+const setMediaContainer = (el: HTMLElement | null, index: number) => {
+  if (el) {
+    mediaContainers.value[index] = el
+    nextTick(() => {
+      initializeVideo(index)
+    })
+  }
+}
 
-      let video = mediaCache.value.get(slide.src) as HTMLVideoElement
-      
-      if (!video) {
-        video = document.createElement('video')
-        video.src = slide.src
-        video.autoplay = true
-        video.muted = true
-        video.loop = true
-        video.playsInline = true
-        video.className = 'w-full h-full object-cover'
-        video.playbackRate = slide.playbackRate || 1
-        
-        video.addEventListener('loadeddata', () => handleMediaLoaded(index))
-        mediaCache.value.set(slide.src, video)
-      }
+const initializeVideo = (index: number) => {
+  const slide = slides[index]
+  if (slide.type !== 'video') return
 
-      container.innerHTML = ''
-      container.appendChild(video)
-    }
-  })
+  const container = mediaContainers.value[index]
+  if (!container) return
+
+  let video = mediaCache.value.get(slide.src) as HTMLVideoElement
+  
+  if (!video) {
+    video = document.createElement('video')
+    video.src = slide.src
+    video.autoplay = true
+    video.muted = true
+    video.loop = true
+    video.playsInline = true
+    video.className = 'w-full h-full object-cover'
+    video.playbackRate = slide.playbackRate || 1
+    
+    video.addEventListener('loadeddata', () => handleMediaLoaded(index))
+    mediaCache.value.set(slide.src, video)
+  }
+
+  container.innerHTML = ''
+  container.appendChild(video)
 }
 
 const resetLoadingState = async () => {
@@ -102,7 +110,6 @@ const resetLoadingState = async () => {
   showCarousel.value = false
   
   await nextTick()
-  initializeVideos()
   checkLoadedMedia()
 }
 
