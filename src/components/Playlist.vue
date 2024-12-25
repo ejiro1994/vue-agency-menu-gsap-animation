@@ -275,9 +275,10 @@ onUnmounted(() => {
     left: 0;
     width: 0;
     height: 100%;
-    background: #000;
+    background: #000000;
     transform-origin: left;
     transform: scaleX(0);
+    opacity: 1;
 }
 
 .progress-indicator {
@@ -285,7 +286,7 @@ onUnmounted(() => {
     top: 50%;
     width: 1px;
     height: 50px;
-    background: #000;
+    background: #000000;
     transform: translateY(-50%);
     pointer-events: none;
 }

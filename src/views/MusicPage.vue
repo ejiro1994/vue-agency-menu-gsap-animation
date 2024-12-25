@@ -1,8 +1,8 @@
 <template>
     <div class="page-container">
         <MediaCarousel ref="carousel" />
-        <h1 class="page-title font-kormelink italic mt-4 text-base">Featured String Arrangements</h1>
-        <p class="font-kormelink italic text-xs px-4 text-gray-500 mb-8">
+        <h1 class="page-title font-kormelink italic mt-4"><span class="italic font-feature-[fancy]">R</span>ecordings</h1>
+        <p class="font-kormelink italic text-lg px-4 text-gray-500 mb-8">
             "Discover the power of expertly crafted string arrangements that add depth, beauty and emotion to your musical vision."
 
 
@@ -30,7 +30,7 @@ provide('goToSlide', goToSlide)
 
 <style scoped>
 .page-container {
-    padding: 50px 0 40px;
+    padding: 120px 0 40px;
     width: 100%;
 }
 
@@ -39,7 +39,7 @@ provide('goToSlide', goToSlide)
 }
 
 .page-title {
-    font-size: 2rem;
+    font-size: 2.5rem;
     margin-bottom: 2rem;
     font-weight: 300;
     padding: 0 14px;

@@ -41,7 +41,7 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 const carouselRef = ref()
 const loadedMedia = ref(new Set())
-const videoRefs = ref<HTMLVideoElement[]>([])
+const videoRefs = ref<(el: HTMLVideoElement | null) => void>([])
 const showCarousel = ref(false)
 
 interface GlobalEvents {
@@ -67,9 +67,9 @@ const allMediaLoaded = computed(() => {
   return loadedCount.value === slides.length && globalEvents.splashScreenComplete
 })
 
-const setVideoRef = (el: Element | ComponentPublicInstance | null, refs: any) => {
-  if (el instanceof HTMLVideoElement) {
-    videoRefs.value = [...videoRefs.value, el]
+const setVideoRef = (el: HTMLVideoElement | null) => {
+  if (el) {
+    videoRefs.value.push(el)
   }
 }
 

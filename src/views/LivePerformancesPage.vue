@@ -1,7 +1,7 @@
 <template>
     <div class="page-container">
         <MediaCarousel ref="carousel" />
-        <h1 class="page-title font-kormelink italic mt-4"><span class="italic  fancy-text">L</span>ive Performances</h1>
+        <h1 class="page-title font-kormelink italic mt-4"><span class="italic font-feature-[fancy]">L</span>ive Performances</h1>
         <div class="content-container">
             <Playlist :filter="'LIVE'" />
         </div>

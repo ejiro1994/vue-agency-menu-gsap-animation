@@ -198,7 +198,7 @@ provide('goToSlide', goToSlide)
           <circle ref="loaderCircle" cx="50" cy="50" r="48" fill="none" stroke="#000" opacity="0.7" stroke-width="0.5"
             stroke-dasharray="301.59" stroke-dashoffset="301.59" class="transform -rotate-90 origin-center" />
         </svg>
-        <img :src="brandLogo" :width="140" alt="Logo" class="relative z-10" />
+        <img :src="brandLogo" :width="80" alt="Logo" class="relative z-10" />
       </div>
     </div>
 
@@ -218,7 +218,9 @@ provide('goToSlide', goToSlide)
           <router-link v-for="(project, index) in projects" :key="project.title"
             :to="'/' + project.title.toLowerCase().replace(' ', '-')"
             class="menu-item block text-3xl md:text-4xl lg:text-5xl mb-6 md:mb-8 font-kormelink hover:opacity-70 transition-opacity uppercase relative border-b-[1px] pt-4 pb-4 opacity-0 -translate-x-8"
-            @mouseenter="() => handleMouseEnter(index)" @mouseleave="() => handleMouseLeave" @click="toggleMenu">
+            @mouseenter="() => typeof window !== 'undefined' && window.innerWidth >= 768 && handleMouseEnter(index)" 
+            @mouseleave="() => typeof window !== 'undefined' && window.innerWidth >= 768 && handleMouseLeave" 
+            @click="toggleMenu">
             <div class="flex items-center">
               <span class="text-sm md:text-sm opacity-50 w-[60px]">(0{{ index + 1 }})</span>
               <h2 class="flex-1">{{ project.title }}</h2>

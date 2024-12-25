@@ -39,11 +39,4 @@ provide('goToSlide', goToSlide)
   font-weight: 300;
   padding: 0 14px;
 }
-
-.fancy-text {
-    font-style: italic;
-    font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
-    -webkit-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
-    -moz-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
-}
 </style> 
