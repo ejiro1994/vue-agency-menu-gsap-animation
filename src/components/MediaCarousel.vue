@@ -43,6 +43,7 @@ const carouselRef = ref<InstanceType<typeof Carousel> | null>(null)
 const loadedMedia = ref<Set<number>>(new Set())
 const videoRefs = ref<HTMLVideoElement[]>([])
 const showCarousel = ref(false)
+const mediaCache = ref<Map<string, HTMLVideoElement | HTMLImageElement>>(new Map())
 
 interface GlobalEvents {
   splashScreenComplete: boolean
@@ -103,17 +104,38 @@ const checkLoadedMedia = () => {
     if (loadedMedia.value.has(index)) return // Skip if already loaded
 
     if (slide.type === 'video') {
-      const video = document.querySelector(`video[src="${slide.src}"]`) as HTMLVideoElement
-      if (video && video.readyState >= 4) {
+      // Check cache first
+      const cachedVideo = mediaCache.value.get(slide.src) as HTMLVideoElement
+      if (cachedVideo) {
         handleMediaLoaded(index)
+        return
+      }
+
+      const video = document.querySelector(`video[src="${slide.src}"]`) as HTMLVideoElement
+      if (video) {
+        if (video.readyState >= 4) {
+          mediaCache.value.set(slide.src, video)
+          handleMediaLoaded(index)
+        }
       }
     } else {
+      // For images
+      const cachedImage = mediaCache.value.get(slide.src) as HTMLImageElement
+      if (cachedImage) {
+        handleMediaLoaded(index)
+        return
+      }
+
       const img = new Image()
       img.src = slide.src
       if (img.complete) {
+        mediaCache.value.set(slide.src, img)
         handleMediaLoaded(index)
       } else {
-        img.onload = () => handleMediaLoaded(index)
+        img.onload = () => {
+          mediaCache.value.set(slide.src, img)
+          handleMediaLoaded(index)
+        }
       }
     }
   })
@@ -149,6 +171,8 @@ onUnmounted(() => {
   if (checkInterval !== null) {
     clearInterval(checkInterval)
   }
+  // Clear the media cache
+  mediaCache.value.clear()
 })
 
 const slideTo = (index: number) => {
