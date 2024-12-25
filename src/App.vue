@@ -118,6 +118,20 @@ onMounted(() => {
     yPercent: -100
   })
 
+  gsap.set(logoRef.value, {
+    opacity: 0,
+    y: 20
+  })
+
+  // Animate logo
+  gsap.to(logoRef.value, {
+    opacity: 1,
+    y: 0,
+    duration: 0.8,
+    ease: 'power3.out',
+    delay: 0.2
+  })
+
   gsap.set('.menu-item', {
     opacity: 0,
     x: -32
@@ -200,7 +214,9 @@ provide('goToSlide', goToSlide)
 
     <nav class="fixed top-0 w-full py-6 flex justify-between items-center z-50 px-[14px] font-kormelink bg-white">
       <router-link to="/">
-        <img ref="logoRef" :src="brandLogo" :width="120" alt="Logo" class="opacity-0" />
+        <div ref="logoRef">
+          <img :src="brandLogo" :width="120" alt="Logo" class="opacity-90" />
+        </div>
       </router-link>
       <button class="uppercase text-[20px] font-medium hover:opacity-70 transition-opacity" @click="toggleMenu">
         {{ isMenuOpen ? 'Close' : 'Menu' }}
@@ -212,11 +228,11 @@ provide('goToSlide', goToSlide)
           <router-link v-for="(project, index) in projects" :key="project.title"
             :to="'/' + project.title.toLowerCase().replace(' ', '-')"
             class="menu-item block text-3xl md:text-4xl lg:text-5xl mb-6 md:mb-8 font-kormelink hover:opacity-70 transition-opacity uppercase relative border-b-[1px] pt-4 pb-4 opacity-0 -translate-x-8"
-            @mouseenter="() => window.innerWidth >= 768 && handleMouseEnter(index)" 
-            @mouseleave="() => window.innerWidth >= 768 && handleMouseLeave" 
+            @mouseenter="() => typeof window !== 'undefined' && window.innerWidth >= 768 && handleMouseEnter(index)" 
+            @mouseleave="() => typeof window !== 'undefined' && window.innerWidth >= 768 && handleMouseLeave" 
             @click="toggleMenu">
             <div class="flex items-center">
-              <!-- <span class="text-sm md:text-sm opacity-50 w-[60px]">(0{{ index + 1 }})</span> -->
+              <span class="text-sm md:text-sm opacity-50 w-[60px]">(0{{ index + 1 }})</span>
               <h2 class="flex-1">{{ project.title }}</h2>
             </div>
           </router-link>
