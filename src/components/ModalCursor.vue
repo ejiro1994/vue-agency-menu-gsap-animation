@@ -19,27 +19,6 @@ defineProps<{
 const x = ref(0)
 const y = ref(0)
 
-const positionModalContainerX = ref(0)
-const positionModalContainerY = ref(0)
-
-const positionModalCursorX = ref(0)
-const positionModalCursorY = ref(0)
-
-useEventListener(window, 'mousemove', (e) => {
-  x.value = e.clientX
-  y.value = e.clientY
-})
-
-// useRafFn(() => {
-//   positionModalContainerX.value = interpolate(positionModalContainerX.value, x.value, 0.08)
-//   positionModalContainerY.value = interpolate(positionModalContainerY.value, y.value, 0.08)
-
-//   positionModalCursorX.value = interpolate(positionModalCursorX.value, x.value, 0.05)
-//   positionModalCursorY.value = interpolate(positionModalCursorY.value, y.value, 0.05)
-
-//   console.log(positionModalContainerX.value)
-// })
-
 const modalContainer = ref(null)
 const cursor = ref(null)
 // const cursorLabel = ref(null)    
@@ -64,28 +43,19 @@ defineExpose({
 })
 
 onMounted(() => {
-  //Move Container
-  const x = gsap.quickTo(modalContainer.value, 'left', { duration: 0.8, ease: 'power3' })
-  const y = gsap.quickTo(modalContainer.value, 'top', { duration: 0.8, ease: 'power3' })
-  //Move cursor
-  const x2 = gsap.quickTo(cursor.value, 'left', { duration: 0.5, ease: 'power3' })
-  const y2 = gsap.quickTo(cursor.value, 'top', { duration: 0.5, ease: 'power3' })
+  const modalX = gsap.quickTo(modalContainer.value, 'left', { duration: 0.8, ease: 'power3' })
+  const modalY = gsap.quickTo(modalContainer.value, 'top', { duration: 0.8, ease: 'power3' })
+  const cursorX = gsap.quickTo(cursor.value, 'left', { duration: 0.5, ease: 'power3' })
+  const cursorY = gsap.quickTo(cursor.value, 'top', { duration: 0.5, ease: 'power3' })
 
   useEventListener(window, 'mousemove', ({ clientX, clientY }) => {
-    x(clientX)
-    y(clientY)
-
-    x2(clientX)
-    y2(clientY)
+    x.value = clientX
+    y.value = clientY
+    modalX(clientX)
+    modalY(clientY)
+    cursorX(clientX)
+    cursorY(clientY)
   })
-
-  // window.addEventListener('mousemove', ({pageX, pageY}) => {
-  //   x(pageX)
-  //   y(pageY)
-
-  //   x2(pageX)
-  //   y2(pageY)
-  // })
 })
 </script>
 
@@ -93,7 +63,6 @@ onMounted(() => {
   <!-- modal container -->
   <div
     ref="modalContainer"
-    :style="{ top: `${positionModalContainerY}px`, left: `${positionModalContainerX}px` }"
     class="h-[350px] w-[400px] flex overflow-hidden items-center justify-center bg-green-100 scale-0 absolute top-0 left-0 z-10 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
     <!-- modal slider -->
     <div :style="{ top: modalState.index * -100 + '%' }" class="ease-cubic-bezier-custom">
@@ -122,7 +91,6 @@ onMounted(() => {
     </div> -->
   </div>
   <div
-    :style="{ top: `${positionModalCursorY}px`, left: `${positionModalCursorX}px` }"
     ref="cursor"
     class="w-[80px] h-[80px] scale-0 rounded-full bg-[#455CE9] text-white flex items-center justify-center text-sm font-light pointer-events-none fixed top-0 left-0 z-20 -translate-x-1/2 -translate-y-1/2">
     Listen

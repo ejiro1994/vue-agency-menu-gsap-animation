@@ -1,6 +1,5 @@
 <template>
   <div class="relative">
-    <div v-show="!allVideosLoaded" class="w-full h-[250px] bg-white"></div>
     <Carousel 
       ref="carouselRef" 
       :perPage="1" 
@@ -8,34 +7,25 @@
       :touchDrag="false"
       :mouseDrag="false"
       class="w-full px-[14px] mb-8 overflow-hidden"
-      :class="[
-        'transition-opacity duration-1000',
-        showCarousel ? 'opacity-100' : 'opacity-0 pointer-events-none'
-      ]"
+      :class="{ 'opacity-0': !allMediaLoaded, 'opacity-100 transition-opacity duration-1000': allMediaLoaded }"
     >
-      <Slide v-for="(slide, index) in slides" :key="index">
-        <div class="w-full h-[250px] relative" :style="{ backgroundColor: '#000000' }">
+      <Slide v-for="(slide, index) in slides" :key="slide.src">
+        <div class="w-full h-[250px] relative bg-black">
           <video v-if="slide.type === 'video'"
-            :ref="setVideoRef"
             :src="slide.src" 
             class="w-full h-full object-cover" 
             autoplay 
             muted 
             loop 
             playsinline
-            webkit-playsinline
-            preload="auto"
-            x-webkit-airplay="allow"
-            :playbackRate="slide.playbackRate"
-            @loadeddata="() => handleVideoLoaded(index)"
+            @loadeddata="() => handleMediaLoaded(index)"
           ></video>
           <img v-else
             :src="slide.src" 
             :alt="slide.alt" 
             class="w-full h-full object-cover"
-            @load="() => handleImageLoaded(index)" 
+            @load="() => handleMediaLoaded(index)"
           />
-          <div v-if="slide.type === 'video'" class="absolute inset-0 mix-blend-hue"></div>
         </div>
       </Slide>
     </Carousel>
@@ -72,8 +62,9 @@ const slides = [
 
 const totalMediaCount = slides.length
 
-const allVideosLoaded = computed(() => {
-  return loadedMedia.value.size === totalMediaCount
+const loadedCount = ref(0)
+const allMediaLoaded = computed(() => {
+  return loadedCount.value === slides.length && globalEvents.splashScreenComplete
 })
 
 const setVideoRef = (el: Element | ComponentPublicInstance | null, refs: any) => {
@@ -91,23 +82,12 @@ const resetLoadingState = async () => {
   checkLoadedMedia()
 }
 
-const handleVideoLoaded = (index: number) => {
-  loadedMedia.value.add(`media${index}`)
-  if (videoRefs.value[index]) {
-    videoRefs.value[index].play().catch(function(error) {
-      console.log("Video play failed:", error)
-    })
-  }
-  checkAllMediaLoaded()
-}
-
-const handleImageLoaded = (index: number) => {
-  loadedMedia.value.add(`media${index}`)
-  checkAllMediaLoaded()
+const handleMediaLoaded = (index: number) => {
+  loadedCount.value++
 }
 
 const checkAllMediaLoaded = () => {
-  if (allVideosLoaded.value && globalEvents.splashScreenComplete) {
+  if (allMediaLoaded.value && globalEvents.splashScreenComplete) {
     setTimeout(() => {
       showCarousel.value = true
     }, 500) // Reduced delay since we're now waiting for splash screen
@@ -120,13 +100,13 @@ const checkLoadedMedia = () => {
     if (slide.type === 'video') {
       const video = videoRefs.value[index]
       if (video && video.readyState >= 4) {
-        handleVideoLoaded(index)
+        handleMediaLoaded(index)
       }
     } else {
       const img = new Image()
       img.src = slide.src
       if (img.complete) {
-        handleImageLoaded(index)
+        handleMediaLoaded(index)
       }
     }
   })
@@ -139,7 +119,7 @@ watch(() => route.path, async () => {
 
 // Watch for splash screen completion
 watch(() => globalEvents.splashScreenComplete, (isComplete) => {
-  if (isComplete && allVideosLoaded.value) {
+  if (isComplete && allMediaLoaded.value) {
     checkAllMediaLoaded()
   }
 })
