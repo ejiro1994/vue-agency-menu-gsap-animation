@@ -25,6 +25,7 @@ const logoRef = ref(null)
 const splashScreen = ref(null)
 const splashContent = ref(null)
 const loaderCircle = ref(null)
+const loaderLine = ref(null)
 
 const projects: Project[] = [
   {
@@ -97,12 +98,12 @@ onMounted(() => {
       duration: 0.8,
       ease: 'power3.out'
     })
-    .to(loaderCircle.value, {
+    .to(loaderLine.value, {
       strokeDashoffset: 0,
       duration: 1.5,
       ease: 'power2.inOut'
     }, '-=0.4')
-    .to([splashContent.value, loaderCircle.value], {
+    .to([splashContent.value, loaderLine.value], {
       opacity: 0,
       scale: 1.1,
       duration: 0.5,
@@ -187,32 +188,24 @@ const goToSlide = (slideIndex: number) => {
 }
 
 provide('goToSlide', goToSlide)
-
-// Add this new function to handle logo clicks
-const handleLogoClick = () => {
-  if (isMenuOpen.value) {
-    menuTimeline.reverse()
-    isMenuOpen.value = false
-  }
-}
 </script>
 
 <template>
   <div>
     <!-- Splash Screen -->
-    <div ref="splashScreen" class="fixed inset-0 z-[60] bg-white flex items-center justify-center">
-      <div ref="splashContent" class="text-center relative">
-        <svg class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] h-[220px]"
-          viewBox="0 0 100 100">
-          <circle ref="loaderCircle" cx="50" cy="50" r="48" fill="none" stroke="#000" opacity="0.7" stroke-width="0.5"
-            stroke-dasharray="301.59" stroke-dashoffset="301.59" class="transform -rotate-90 origin-center" />
-        </svg>
-        <img :src="brandLogo" :width="80" alt="Logo" class="relative z-10" />
+    <div ref="splashScreen" class="fixed inset-0 z-[60] bg-white flex flex-col items-center justify-center">
+      <div ref="splashContent" class="text-center mb-8 flex flex-col items-center">
+        <h1 class="text-2xl mb-4 font-kormelink mt-10">Film Scores, Albums<br>and Live Performances</h1>
+        <img :src="brandLogo" :width="80" alt="Logo" class=" mt-[100px] mb-4" />
       </div>
+      <svg class="w-[50%] h-2" viewBox="0 0 100 2">
+        <line ref="loaderLine" x1="0" y1="1" x2="100" y2="1" stroke="#000" opacity="0.7" stroke-width="0.5"
+          stroke-dasharray="100" stroke-dashoffset="100" />
+      </svg>
     </div>
 
     <nav class="fixed top-0 w-full py-6 flex justify-between items-center z-50 px-[14px] font-kormelink bg-white">
-      <router-link to="/" @click="handleLogoClick">
+      <router-link to="/" @click="isMenuOpen = false">
         <div ref="logoRef">
           <img :src="brandLogo" :width="120" alt="Logo" class="opacity-90" />
         </div>
@@ -235,20 +228,11 @@ const handleLogoClick = () => {
           </router-link>
         </nav>
         <div class="hidden md:block">
-          <ModalCursor 
-            ref="modalCursor" 
-            :projects="projects" 
-            :modalState="modalState"
-            :isMenuOpen="isMenuOpen"
-          />
+          <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" :isMenuOpen="isMenuOpen" />
         </div>
       </div>
-      
-      <MediaCarousel 
-      v-show="showCarousel" 
-      ref="carouselRef"
-      class="mt-[150px]"
-    />
+
+      <MediaCarousel v-show="showCarousel" ref="carouselRef" class="mt-[150px]" />
 
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
@@ -257,7 +241,7 @@ const handleLogoClick = () => {
       </router-view>
     </main>
 
-  
+
   </div>
 </template>
 
@@ -274,5 +258,17 @@ const handleLogoClick = () => {
 
 .menu-nav {
   font-weight: 300;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
 }
 </style>
