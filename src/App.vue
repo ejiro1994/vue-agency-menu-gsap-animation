@@ -245,9 +245,9 @@ const handleLogoClick = () => {
         <div class="hidden md:block">
           <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" :isMenuOpen="isMenuOpen" />
         </div>
-        <transition name="fade">
+        <!-- <transition name="fade">
           <ShaderComponent v-if="isMenuOpen" shaderImage="/images/about.png" />
-        </transition>
+        </transition> -->
       </div>
 
       <MediaCarousel v-show="showCarousel" ref="carouselRef" class="mt-[150px]" />

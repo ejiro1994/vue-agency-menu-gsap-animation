@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
-import * as THREE from 'three';
+import { defineComponent, onMounted, ref } from 'vue'
+import * as THREE from 'three'
 // import glsl from 'babel-plugin-glsl/macro';
 
 const WaveShaderMaterial = class extends THREE.ShaderMaterial {
@@ -52,9 +52,9 @@ const WaveShaderMaterial = class extends THREE.ShaderMaterial {
           gl_FragColor = vec4(texture, 1.0); 
         }
       `
-    });
+    })
   }
-};
+}
 
 export default defineComponent({
   name: 'ShaderComponent',
@@ -65,58 +65,58 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const container = ref<HTMLElement | null>(null);
-    const image = new Image();
+    const container = ref<HTMLElement | null>(null)
+    const image = new Image()
 
     onMounted(() => {
-      if (!container.value) return;
+      if (!container.value) return
 
-      image.src = props.shaderImage;
+      image.src = props.shaderImage
       image.onload = () => {
-        const width = image.width;
-        const height = image.height;
-        const scale = 0.6;
+        const width = image.width
+        const height = image.height
+        const scale = 0.6
 
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ alpha: true });
+        const scene = new THREE.Scene()
+        const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
+        const renderer = new THREE.WebGLRenderer({ alpha: true })
 
         if (container.value) {
-          renderer.setSize(width * scale, height * scale);
-          container.value.appendChild(renderer.domElement);
+          renderer.setSize(width * scale, height * scale)
+          container.value.appendChild(renderer.domElement)
         }
 
-        const geometry = new THREE.PlaneGeometry(3, 3);
-        const material = new WaveShaderMaterial();
-        material.uniforms.uTexture.value = new THREE.TextureLoader().load(props.shaderImage);
+        const geometry = new THREE.PlaneGeometry(3, 3)
+        const material = new WaveShaderMaterial()
+        material.uniforms.uTexture.value = new THREE.TextureLoader().load(props.shaderImage)
 
-        const plane = new THREE.Mesh(geometry, material);
-        scene.add(plane);
+        const plane = new THREE.Mesh(geometry, material)
+        scene.add(plane)
 
-        camera.position.z = 7;
+        camera.position.z = 7
 
         const animate = () => {
-          requestAnimationFrame(animate);
-          material.uniforms.uTime.value += 0.01;
-          renderer.render(scene, camera);
-        };
+          requestAnimationFrame(animate)
+          material.uniforms.uTime.value += 0.01
+          renderer.render(scene, camera)
+        }
 
-        animate();
-      };
-    });
+        animate()
+      }
+    })
 
     return {
       container
-    };
+    }
   }
-});
+})
 </script>
 
 <style scoped>
 .shader-container {
-  width: 500px; 
-  height: 500px; 
-  
+  width: 500px;
+  height: 500px;
+
   position: absolute;
   bottom: -100px;
   left: -350px;
