@@ -12,7 +12,6 @@ import gsap from 'gsap'
 import { useRoute } from 'vue-router'
 import MediaCarousel from '@/components/MediaCarousel.vue'
 import ShaderComponent from './components/ShaderComponent.vue'
-import WaveShader from './components/WaveShader.vue'
 // import menuImage from '@/assets/images/menu-image.png'
 
 // Create a reactive global events object
@@ -247,7 +246,7 @@ const handleLogoClick = () => {
           <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" :isMenuOpen="isMenuOpen" />
         </div>
         <transition name="fade">
-          <ShaderComponent v-if="isMenuOpen" shaderImage="/images/about.png" />
+          <ShaderComponent v-if="isMenuOpen" shaderImage="/images/scorebook.png" />
         </transition>
       </div>
 
