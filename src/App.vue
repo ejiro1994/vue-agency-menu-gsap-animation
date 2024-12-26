@@ -246,7 +246,7 @@ const handleLogoClick = () => {
           <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" :isMenuOpen="isMenuOpen" />
         </div>
         <transition name="fade">
-          <ShaderComponent v-if="isMenuOpen" shaderImage="/images/scorebook.png" />
+          <ShaderComponent v-if="isMenuOpen" shaderImage="/images/about.png" />
         </transition>
       </div>
 

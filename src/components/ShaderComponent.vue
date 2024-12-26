@@ -75,7 +75,7 @@ export default defineComponent({
       image.onload = () => {
         const width = image.width;
         const height = image.height;
-        const scale = 0.5;
+        const scale = 0.6;
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
@@ -93,7 +93,7 @@ export default defineComponent({
         const plane = new THREE.Mesh(geometry, material);
         scene.add(plane);
 
-        camera.position.z = 4;
+        camera.position.z = 7;
 
         const animate = () => {
           requestAnimationFrame(animate);
@@ -118,7 +118,7 @@ export default defineComponent({
   height: 500px; 
   
   position: absolute;
-  bottom: 4px;
-  left: -250px;
+  bottom: -100px;
+  left: -350px;
 }
 </style>
