@@ -155,12 +155,15 @@ const playTrack = (index: number) => {
     isPlaying.value = true
 
     gsap.to(window, {
-        duration: 1,
+        duration: 2,
         scrollTo: {
             y: 0,
             offsetY: 100
+
         },
-        ease: "cubic-bezier(0.45, 0.05, 0.55, 0.95)"
+        delay: 1,
+        ease: 'power4.inOut'
+        // ease: "cubic-bezier(0.45, 0.05, 0.55, 0.95)"
     })
 
     const trackTitle = playlist.value[index].title
@@ -177,7 +180,7 @@ const updateProgress = () => {
             value: progressPercent,
             duration: 0.1,
             ease: "linear"
-        });
+        })
         // Animate the progress line
         const progressLine = document.querySelector('.progress-line') as HTMLElement
         if (progressLine) {
@@ -185,7 +188,7 @@ const updateProgress = () => {
                 scaleX: progressPercent / 100,
                 duration: 0.1,
                 ease: "linear"
-            });
+            })
         }
     }
 }

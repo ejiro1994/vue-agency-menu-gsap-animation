@@ -95,7 +95,7 @@ onMounted(() => {
   splashTimeline
     .from(splashContent.value, {
       opacity: 0,
-      y: -20, // Start from 20px below
+      // scale: 0.9,
       duration: 0.8,
       ease: 'power3.out'
     })
@@ -106,7 +106,7 @@ onMounted(() => {
     }, '-=0.4')
     .to([splashContent.value, loaderLine.value], {
       opacity: 0,
-      y: 20, // Move up by 20px
+      // scale: 1.1,
       duration: 0.5,
       ease: 'power3.in'
     }, '+=0.2')
@@ -120,10 +120,8 @@ onMounted(() => {
   splashTimeline.add(() => {
     gsap.to(logoRef.value, {
       opacity: 0.9,
-      y: 0, // Ensure it animates to its original position
       duration: 0.5,
-      ease: 'power2.out',
-      delay: 1.5 // Stagger to ensure the logo comes after
+      ease: 'power2.out'
     })
   })
 
@@ -191,6 +189,16 @@ const goToSlide = (slideIndex: number) => {
 }
 
 provide('goToSlide', goToSlide)
+
+const handleLogoClick = () => {
+  isMenuOpen.value = false
+  gsap.to(window, {
+    scrollTo: { y: 0 },
+    duration: 2,
+    delay: 1,
+    ease: 'power4.inOut'
+  })
+}
 </script>
 
 <template>
@@ -209,7 +217,7 @@ provide('goToSlide', goToSlide)
     </div>
 
     <nav class="fixed top-0 w-full py-6 flex justify-between items-center z-50 px-[14px] font-kormelink bg-white">
-      <router-link to="/" @click="isMenuOpen = false">
+      <router-link to="/" @click="handleLogoClick">
         <div ref="logoRef">
           <img :src="brandLogo" :width="120" alt="Logo" class="opacity-90" />
         </div>
