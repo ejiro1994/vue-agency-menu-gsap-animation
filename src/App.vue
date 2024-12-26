@@ -197,8 +197,8 @@ provide('goToSlide', goToSlide)
     <div ref="splashScreen" class="fixed inset-0 z-[60] bg-white flex flex-col items-center justify-center">
       <div ref="splashContent" class="text-center mb-8 flex flex-col items-center">
         <h1 class="text-l mb-4 font-kormelink mt-10">Film Scores, Albums<br>and <span class="fancy-text text-2xl tracking-wide">L</span>ive Performances</h1>
-        <img :src="brandLogo" :width="70" alt="Logo" class=" mt-[150px] mb-4" />
-        <!-- <img :src="iconLogo" :width="20" alt="Logo" class=" mb-[150px] mt-2" /> -->
+        <!-- <img :src="brandLogo" :width="70" alt="Logo" class=" mt-[150px] mb-4" /> -->
+        <img :src="iconLogo" :width="20" alt="Logo" class=" mb-[150px] mt-2" />
       </div>
       <svg class="w-[20%] h-2" viewBox="0 0 100 2" preserveAspectRatio="none">
         <line ref="loaderLine" x1="0" y1="1" x2="100" y2="1" stroke="#000" opacity="0.7" stroke-width="0.2"
