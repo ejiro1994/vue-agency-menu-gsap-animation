@@ -11,6 +11,9 @@ import 'vue3-carousel/dist/carousel.css'
 import gsap from 'gsap'
 import { useRoute } from 'vue-router'
 import MediaCarousel from '@/components/MediaCarousel.vue'
+import ShaderComponent from './components/ShaderComponent.vue'
+import WaveShader from './components/WaveShader.vue'
+// import menuImage from '@/assets/images/menu-image.png'
 
 // Create a reactive global events object
 const globalEvents = reactive({
@@ -206,7 +209,8 @@ const handleLogoClick = () => {
     <!-- Splash Screen -->
     <div ref="splashScreen" class="fixed inset-0 z-[60] bg-white flex flex-col items-center justify-center">
       <div ref="splashContent" class="text-center mb-8 flex flex-col items-center">
-        <h1 class="text-l mb-4 font-kormelink mt-10">Film Scores, Albums<br>and <span class="fancy-text text-2xl tracking-wide">L</span>ive Performances</h1>
+        <h1 class="text-l mb-4 font-kormelink mt-10">Film Scores, Albums<br>and <span
+            class="fancy-text text-2xl tracking-wide">L</span>ive Performances</h1>
         <!-- <img :src="brandLogo" :width="70" alt="Logo" class=" mt-[150px] mb-4" /> -->
         <img :src="iconLogo" :width="15" alt="Logo" class=" mb-[150px] mt-2" />
       </div>
@@ -243,7 +247,7 @@ const handleLogoClick = () => {
           <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" :isMenuOpen="isMenuOpen" />
         </div>
         <transition name="fade">
-          <img v-if="isMenuOpen" src="/images/menu-image.png" alt="Menu Image" class="absolute bottom-4 left-4 w-24" />
+          <ShaderComponent v-if="isMenuOpen" shaderImage="/images/about.png" />
         </transition>
       </div>
 
@@ -256,14 +260,20 @@ const handleLogoClick = () => {
       </router-view>
     </main>
 
+    <div class="menu-image-container">
+      <!-- <img :src="menuImage" alt="Menu Image" class="w-24" /> -->
+    </div>
 
   </div>
 </template>
 
 <style scoped>
 .fade-enter-active {
-  transition: opacity 0.5s ease 1s;
+  transition-delay: 2s;
+  transition: opacity 0.5s ease;
+
 }
+
 
 .fade-leave-active {
   transition: opacity 0.5s ease;
@@ -291,9 +301,9 @@ const handleLogoClick = () => {
 }
 
 .fancy-text {
-    font-style: italic;
-    font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
-    -webkit-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
-    -moz-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
+  font-style: italic;
+  font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
+  -webkit-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
+  -moz-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
 }
 </style>
