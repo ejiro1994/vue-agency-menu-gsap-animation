@@ -95,7 +95,7 @@ onMounted(() => {
   splashTimeline
     .from(splashContent.value, {
       opacity: 0,
-      // scale: 0.9,
+      y: -20, // Animate down y
       duration: 0.8,
       ease: 'power3.out'
     })
@@ -106,7 +106,7 @@ onMounted(() => {
     }, '-=0.4')
     .to([splashContent.value, loaderLine.value], {
       opacity: 0,
-      // scale: 1.1,
+      y: 20, // Animate down y
       duration: 0.5,
       ease: 'power3.in'
     }, '+=0.2')

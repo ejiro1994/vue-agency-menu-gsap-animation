@@ -161,7 +161,6 @@ const playTrack = (index: number) => {
             offsetY: 100
 
         },
-        delay: 1,
         ease: 'power4.inOut'
         // ease: "cubic-bezier(0.45, 0.05, 0.55, 0.95)"
     })
