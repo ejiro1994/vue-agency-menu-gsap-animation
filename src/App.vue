@@ -27,29 +27,28 @@ const menuDrawer = ref(null)
 const logoRef = ref(null)
 const splashScreen = ref(null)
 const splashContent = ref(null)
-const loaderCircle = ref(null)
 const loaderLine = ref(null)
 
 const projects: Project[] = [
   {
     title: 'music',
     src: 'music.png',
-    color: '#000000'
+    color: '#FFFFFF'
   },
   {
     title: 'film scores',
     src: 'films.png',
-    color: '#8C8C8C'
+    color: '#000000'
   },
   {
     title: 'live performances',
     src: 'live-performances.png',
-    color: '#000000'
+    color: '#FFFFFF'
   },
   {
     title: 'about',
     src: 'about.png',
-    color: '#706D63'
+    color: '#F5F5F5'
   }
 ]
 
@@ -193,7 +192,13 @@ const goToSlide = (slideIndex: number) => {
 provide('goToSlide', goToSlide)
 
 const handleLogoClick = () => {
-  isMenuOpen.value = false
+  // Close menu if it's open
+  if (isMenuOpen.value) {
+    isMenuOpen.value = false
+    menuTimeline.reverse()
+  }
+  
+  // Scroll to top
   gsap.to(window, {
     scrollTo: { y: 0 },
     duration: 2,
@@ -219,28 +224,35 @@ const handleLogoClick = () => {
       </svg>
     </div>
 
-    <nav class="fixed top-0 w-full py-6 flex justify-between items-center z-50 px-[14px] font-kormelink bg-white">
-      <router-link to="/" @click="handleLogoClick">
-        <div ref="logoRef">
-          <img :src="brandLogo" :width="120" alt="Logo" class="opacity-90" />
+    <nav class="nav-container">
+      <div class="nav-content">
+        <div class="logo-container">
+          <router-link to="/" @click="handleLogoClick">
+            <div ref="logoRef">
+              <img :src="brandLogo" :width="120" alt="Logo" class="opacity-90" />
+            </div>
+          </router-link>
         </div>
-      </router-link>
-      <button class="uppercase text-[20px] font-medium hover:opacity-70 transition-opacity" @click="toggleMenu">
-        {{ isMenuOpen ? 'Close' : 'Menu' }}
-      </button>
+        <div class="invisible lg:visible"><!-- Spacer for desktop layout --></div>
+        <button class="menu-button" @click="toggleMenu">
+          {{ isMenuOpen ? 'Close' : 'Menu' }}
+        </button>
+      </div>
     </nav>
     <main class="w-screen mt-[100px]">
       <div ref="menuDrawer" class="fixed inset-0 z-40 bg-white mt-[94px]">
         <nav class="menu-nav p-8 md:p-14">
-          <router-link v-for="(project, index) in projects" :key="project.title"
-            :to="'/' + project.title.toLowerCase().replace(' ', '-')"
-            class="menu-item block text-3xl md:text-4xl lg:text-5xl mb-6 md:mb-8 font-kormelink hover:opacity-70 transition-opacity uppercase relative border-b-[1px] pt-4 pb-4 opacity-0 -translate-x-8"
-            @mouseenter="() => handleMouseEnter(index)" @mouseleave="() => handleMouseLeave" @click="toggleMenu">
-            <div class="flex items-center">
-              <!-- <span class="text-sm md:text-sm opacity-50 w-[60px]">(0{{ index + 1 }})</span> -->
-              <h2 class="flex-1">{{ project.title }}</h2>
-            </div>
-          </router-link>
+<router-link v-for="(project, index) in projects" :key="project.title"
+  :to="'/' + project.title.toLowerCase().replace(' ', '-')"
+  class="menu-item block text-3xl md:text-4xl lg:text-5xl mb-6 md:mb-8 font-kormelink transition-opacity uppercase relative border-b-[1px] pt-4 pb-4 opacity-0 -translate-x-8"
+  @mouseenter="() => handleMouseEnter(index)" @mouseleave="() => handleMouseLeave" @click="toggleMenu">
+  <div class="flex items-center group">
+    <!-- <span class="text-sm md:text-sm opacity-50 w-[60px]">(0{{ index + 1 }})</span> -->
+    <h2 class="flex-1 group-hover:translate-x-6 group-hover:opacity-60 transition duration-300">
+      {{ project.title }}
+    </h2>
+  </div>
+</router-link>
         </nav>
         <div class="hidden md:block">
           <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" :isMenuOpen="isMenuOpen" />
@@ -304,5 +316,22 @@ const handleLogoClick = () => {
   font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
   -webkit-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
   -moz-font-feature-settings: "swsh" 1, "cswh" 1, "salt" 1, "dlig" 1;
+}
+
+.nav-container {
+  @apply fixed top-0 w-full py-6 px-[14px] z-50 bg-white;
+}
+
+.nav-content {
+  @apply flex justify-between items-center font-kormelink;
+  @apply lg:container lg:mx-auto lg:max-w-7xl lg:relative;
+}
+
+.logo-container {
+  @apply lg:absolute lg:left-1/2 lg:-translate-x-1/2;
+}
+
+.menu-button {
+  @apply uppercase text-[20px] font-medium hover:opacity-70 transition-opacity;
 }
 </style>
