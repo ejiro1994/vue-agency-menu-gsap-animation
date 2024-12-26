@@ -6,6 +6,7 @@
       :navigationEnabled="false" 
       :touchDrag="false"
       :mouseDrag="false"
+      :initialSlide="2"
       class="w-full mb-8 overflow-hidden"
       :class="{ 'opacity-0': !allMediaLoaded, 'opacity-100 transition-opacity duration-1000': allMediaLoaded }"
     >
@@ -214,7 +215,12 @@ onMounted(async () => {
     if (!allMediaLoaded.value) {
       checkLoadedMedia()
     }
-  }, 1000) // Check every second
+  }, 1000)
+  
+  // Start on slide 2
+  nextTick(() => {
+    carouselRef.value?.slideTo(1)
+  })
 })
 
 // Clean up the interval when component is unmounted
