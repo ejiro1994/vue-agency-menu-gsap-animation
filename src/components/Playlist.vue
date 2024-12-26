@@ -155,7 +155,7 @@ const playTrack = (index: number) => {
     isPlaying.value = true
 
     gsap.to(window, {
-        duration: 2,
+        duration: 2.5,
         scrollTo: {
             y: 0,
             offsetY: 100

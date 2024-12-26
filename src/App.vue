@@ -107,6 +107,7 @@ onMounted(() => {
     .to([splashContent.value, loaderLine.value], {
       opacity: 0,
       y: 20, // Animate down y
+      scale: .8, // Grow a little when animating out
       duration: 0.5,
       ease: 'power3.in'
     }, '+=0.2')
