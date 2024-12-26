@@ -95,7 +95,7 @@ onMounted(() => {
   splashTimeline
     .from(splashContent.value, {
       opacity: 0,
-      y: -20, // Animate down y
+      // scale: 0.9,
       duration: 0.8,
       ease: 'power3.out'
     })
@@ -106,8 +106,7 @@ onMounted(() => {
     }, '-=0.4')
     .to([splashContent.value, loaderLine.value], {
       opacity: 0,
-      y: 20, // Animate down y
-      scale: .8, // Grow a little when animating out
+      // scale: 1.1,
       duration: 0.5,
       ease: 'power3.in'
     }, '+=0.2')
@@ -172,9 +171,6 @@ onMounted(() => {
       console.log("Video play failed:", error)
     })
   })
-
-  // Start on slide 2 (index 1)
-  carouselRef.value?.slideTo(1)
 })
 
 const toggleMenu = () => {
@@ -246,6 +242,9 @@ const handleLogoClick = () => {
         <div class="hidden md:block">
           <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" :isMenuOpen="isMenuOpen" />
         </div>
+        <transition name="fade">
+          <img v-if="isMenuOpen" src="/images/menu-image.png" alt="Menu Image" class="absolute bottom-4 left-4 w-24" />
+        </transition>
       </div>
 
       <MediaCarousel v-show="showCarousel" ref="carouselRef" class="mt-[150px]" />
@@ -262,9 +261,12 @@ const handleLogoClick = () => {
 </template>
 
 <style scoped>
-.fade-enter-active,
+.fade-enter-active {
+  transition: opacity 0.5s ease 1s;
+}
+
 .fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.5s ease;
 }
 
 .fade-enter-from,

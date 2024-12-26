@@ -1,12 +1,12 @@
 <template>
-  <div class="relative">
+  <div class="carousel-wrapper">
     <Carousel 
       ref="carouselRef" 
       :perPage="1" 
       :navigationEnabled="false" 
       :touchDrag="false"
       :mouseDrag="false"
-      class="w-full px-[14px] mb-8 overflow-hidden"
+      class="w-full mb-8 overflow-hidden"
       :class="{ 'opacity-0': !allMediaLoaded, 'opacity-100 transition-opacity duration-1000': allMediaLoaded }"
     >
       <Slide v-for="(slide, index) in slides" :key="slide.src">
@@ -243,5 +243,11 @@ defineExpose({ slideTo })
 <style scoped>
 :deep(.carousel__track) {
   overflow: visible;
+}
+
+.carousel-wrapper {
+  max-width: 690px;
+  /* Remove margin to keep it left-aligned */
+  margin: 0 auto;
 }
 </style>
