@@ -1,6 +1,6 @@
 <template>
   <PageLayout>
-    <h1 class="page-title font-kormelink italic mt-4 text-base">Featured String Arrangements</h1>
+    <h1 class="page-title font-kormelink italic mt-4 text-base capitalize">Featured String Arrangements</h1>
     <p class="font-kormelink italic text-xs px-4 text-gray-500 mb-8">
       "For over three years, I've partnered with artists and directors to craft string arrangements that elevate projects with unparalleled depth, beauty and emotion."
     </p>

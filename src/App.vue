@@ -187,6 +187,14 @@ const goToSlide = (slideIndex: number) => {
 }
 
 provide('goToSlide', goToSlide)
+
+// Add this new function to handle logo clicks
+const handleLogoClick = () => {
+  if (isMenuOpen.value) {
+    menuTimeline.reverse()
+    isMenuOpen.value = false
+  }
+}
 </script>
 
 <template>
@@ -204,7 +212,7 @@ provide('goToSlide', goToSlide)
     </div>
 
     <nav class="fixed top-0 w-full py-6 flex justify-between items-center z-50 px-[14px] font-kormelink bg-white">
-      <router-link to="/" @click="toggleMenu">
+      <router-link to="/" @click="handleLogoClick">
         <div ref="logoRef">
           <img :src="brandLogo" :width="120" alt="Logo" class="opacity-90" />
         </div>

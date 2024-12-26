@@ -1,6 +1,9 @@
 <template>
     <div class="page-container">
         <h1 class="page-title font-kormelink italic mt-4"><span class="italic font-feature-[fancy]">L</span>ive Performances</h1>
+        <p class="font-kormelink italic text-xs px-4 text-gray-500 mb-8">
+      "I've written string arrangements for live performances that have elevated shows, adding depth and emotion to create unforgettable musical experiences."
+    </p>
         <div class="content-container">
             <Playlist :filter="'LIVE'" />
         </div>
