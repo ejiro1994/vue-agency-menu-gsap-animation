@@ -195,11 +195,11 @@ provide('goToSlide', goToSlide)
     <!-- Splash Screen -->
     <div ref="splashScreen" class="fixed inset-0 z-[60] bg-white flex flex-col items-center justify-center">
       <div ref="splashContent" class="text-center mb-8 flex flex-col items-center">
-        <h1 class="text-2xl mb-4 font-kormelink mt-10">Film Scores, Albums<br>and Live Performances</h1>
-        <img :src="brandLogo" :width="80" alt="Logo" class=" mt-[100px] mb-4" />
+        <h1 class="text-l mb-4 font-kormelink mt-10">Film Scores, Albums<br>and Live Performances</h1>
+        <img :src="brandLogo" :width="50" alt="Logo" class=" mt-[100px] mb-4" />
       </div>
       <svg class="w-[50%] h-2" viewBox="0 0 100 2">
-        <line ref="loaderLine" x1="0" y1="1" x2="100" y2="1" stroke="#000" opacity="0.7" stroke-width="0.5"
+        <line ref="loaderLine" x1="0" y1="1" x2="100" y2="1" stroke="#000" opacity="0.5" stroke-width="0.5"
           stroke-dasharray="100" stroke-dashoffset="100" />
       </svg>
     </div>
