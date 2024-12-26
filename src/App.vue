@@ -95,7 +95,7 @@ onMounted(() => {
   splashTimeline
     .from(splashContent.value, {
       opacity: 0,
-      // scale: 0.9,
+      y: -20, // Start from 20px below
       duration: 0.8,
       ease: 'power3.out'
     })
@@ -106,7 +106,7 @@ onMounted(() => {
     }, '-=0.4')
     .to([splashContent.value, loaderLine.value], {
       opacity: 0,
-      // scale: 1.1,
+      y: 20, // Move up by 20px
       duration: 0.5,
       ease: 'power3.in'
     }, '+=0.2')
@@ -120,8 +120,10 @@ onMounted(() => {
   splashTimeline.add(() => {
     gsap.to(logoRef.value, {
       opacity: 0.9,
+      y: 0, // Ensure it animates to its original position
       duration: 0.5,
-      ease: 'power2.out'
+      ease: 'power2.out',
+      delay: 1.5 // Stagger to ensure the logo comes after
     })
   })
 
@@ -198,9 +200,9 @@ provide('goToSlide', goToSlide)
       <div ref="splashContent" class="text-center mb-8 flex flex-col items-center">
         <h1 class="text-l mb-4 font-kormelink mt-10">Film Scores, Albums<br>and <span class="fancy-text text-2xl tracking-wide">L</span>ive Performances</h1>
         <!-- <img :src="brandLogo" :width="70" alt="Logo" class=" mt-[150px] mb-4" /> -->
-        <img :src="iconLogo" :width="20" alt="Logo" class=" mb-[150px] mt-2" />
+        <img :src="iconLogo" :width="15" alt="Logo" class=" mb-[150px] mt-2" />
       </div>
-      <svg class="w-[20%] h-2" viewBox="0 0 100 2" preserveAspectRatio="none">
+      <svg class="w-[40%] h-2" viewBox="0 0 100 2" preserveAspectRatio="none">
         <line ref="loaderLine" x1="0" y1="1" x2="100" y2="1" stroke="#000" opacity="0.7" stroke-width="0.2"
           stroke-dasharray="100" stroke-dashoffset="100" />
       </svg>
