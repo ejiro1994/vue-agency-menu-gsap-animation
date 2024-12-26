@@ -172,6 +172,9 @@ onMounted(() => {
       console.log("Video play failed:", error)
     })
   })
+
+  // Start on slide 2 (index 1)
+  carouselRef.value?.slideTo(1)
 })
 
 const toggleMenu = () => {
