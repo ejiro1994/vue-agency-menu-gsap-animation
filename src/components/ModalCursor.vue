@@ -67,9 +67,18 @@ onMounted(() => {
     class="h-[350px] w-[400px] flex overflow-hidden items-center justify-center bg-[#FFFFFF] scale-0 absolute top-0 left-0 z-10 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
     :class="{ 'hidden': !isMenuOpen }">
     <div :style="{ top: modalState.index * -100 + '%' }" class="ease-cubic-bezier-custom">
-      <div v-for="({ src, color }, index) in projects" :key="`modal_${index}`"
+      <div v-for="({ title, src, color }, index) in projects" :key="`modal_${index}`"
         class="h-full w-full flex justify-center items-center" :style="{ backgroundColor: color || '#F5F5F5' }">
-        <img :src="`/images/${src}`" alt="image" class="w-[300px]" />
+        <template v-if="title === 'film scores'">
+          <video autoplay loop muted playsinline class="w-[300px]">
+            <source src="/videos/duality.mov" type="video/mp4" />
+            <source src="/videos/duality.mov" type="video/quicktime" />
+            Your browser does not support the video tag.
+          </video>
+        </template>
+        <template v-else>
+          <img :src="`/images/${src}`" alt="image" class="w-[300px]" />
+        </template>
       </div>
     </div>
   </div>

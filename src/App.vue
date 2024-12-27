@@ -39,7 +39,7 @@ const projects: Project[] = [
   {
     title: 'film scores',
     src: 'films.png',
-    color: '#000000'
+    color: '#F5F5F5'
   },
   {
     title: 'live performances',
@@ -233,6 +233,10 @@ const handleLogoClick = () => {
     ease: 'power4.inOut'
   })
 }
+
+const handleEmailClick = () => {
+  window.location.href = 'mailto:lennox.akpoduado@gmail.com?subject=Project Collaboration Inquiry'
+}
 </script>
 
 <template>
@@ -253,10 +257,14 @@ const handleLogoClick = () => {
 
     <nav class="nav-container">
       <div class="nav-content">
+        <!-- <button @click="handleEmailClick"
+          class="hidden lg:block text-xl font-kormelink px-4 py-2 hover:bg-black hover:text-white transition-colors duration-300 uppercase border-b-[1px] border-b-black/50">
+          inquire
+        </button> -->
         <div class="logo-container">
           <router-link to="/" @click="handleLogoClick">
             <div ref="logoRef">
-              <img :src="brandLogo" :width="120" alt="Logo" class="opacity-90" />
+              <img :src="brandLogo" :width="120" alt="Logo" class="opacity-90 2xl:w-[130px]" />
             </div>
           </router-link>
         </div>
@@ -279,6 +287,14 @@ const handleLogoClick = () => {
               </h2>
             </div>
           </router-link>
+
+          <!-- Mobile Contact Button -->
+          <button 
+            @click="handleEmailClick"
+            class="menu-item lg:hidden block text-3xl font-kormelink uppercase   px-6 pt-4 pb-3 border border-black/30 textblack-white transition-colors duration-300 mt-10 hover:bg-black hover:text-white"
+          >
+          inquire
+          </button>
 
           <!-- Menu Video -->
           <div
