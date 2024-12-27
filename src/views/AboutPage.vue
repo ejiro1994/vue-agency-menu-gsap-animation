@@ -3,7 +3,7 @@
         
         <!-- <h1 class="page-title font-kormelink  mt-4">Behind the Music</h1> -->
         <div class="content">
-            <p class="mb-4 uppercase">
+            <p class="mb-4 uppercase pt-11">
                 I'm a string arranger and producer from West London, dedicated to creating emotive, bespoke arrangements
                 that bring stories to life through music. With a deep passion for blending classical traditions with
                 contemporary sounds, I collaborate with artists, filmmakers and producers to deliver timeless and
