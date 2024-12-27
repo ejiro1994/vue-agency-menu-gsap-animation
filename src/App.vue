@@ -289,12 +289,12 @@ const handleEmailClick = () => {
           </router-link>
 
           <!-- Mobile Contact Button -->
-          <button 
+          <!-- <button 
             @click="handleEmailClick"
             class="menu-item lg:hidden block text-3xl font-kormelink uppercase   px-6 pt-4 pb-3 border border-black/30 textblack-white transition-colors duration-300 mt-10 hover:bg-black hover:text-white"
           >
           inquire
-          </button>
+          </button> -->
 
           <!-- Menu Video -->
           <div
