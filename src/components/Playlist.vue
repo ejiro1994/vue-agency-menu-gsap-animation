@@ -82,7 +82,7 @@ const allTracks = ref<Track[]>([
         title: 'DUALITY (SHORT FILM)',
         artist: 'EJB',
         duration: '0:38',
-        url: '/playlist/duality.mp3'
+        url: '/playlist/duality.wav'
     },
     {
         title: 'GOODUMS (LIVE STRING ARRANGEMENT)',
