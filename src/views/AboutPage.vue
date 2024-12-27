@@ -1,7 +1,7 @@
 <template>
     <div class="page-container">
         
-        <h1 class="page-title font-kormelink italic mt-4">The Visionary</h1>
+        <!-- <h1 class="page-title font-kormelink  mt-4">Behind the Music</h1> -->
         <div class="content">
             <p class="mb-4 uppercase">
                 I'm a string arranger and producer from West London, dedicated to creating emotive, bespoke arrangements
