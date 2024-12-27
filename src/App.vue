@@ -200,10 +200,13 @@ onMounted(() => {
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 
+  // Toggle body scroll
   if (isMenuOpen.value) {
+    document.body.style.overflow = 'hidden'
     menuTimeline.play()
     menuVideoTimeline.timeScale(1).play()
   } else {
+    document.body.style.overflow = ''
     menuTimeline.reverse()
     menuVideoTimeline.timeScale(3).reverse() // 3x faster on reverse
   }
@@ -220,9 +223,9 @@ const handleLogoClick = () => {
   // Close menu if it's open
   if (isMenuOpen.value) {
     isMenuOpen.value = false
+    document.body.style.overflow = ''
     menuTimeline.reverse()
-    menuVideoTimeline.timeScale(3).reverse() // 3x faster on reverse
-
+    menuVideoTimeline.timeScale(3).reverse()
   }
 
   // Scroll to top
