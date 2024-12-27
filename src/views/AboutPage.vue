@@ -10,7 +10,7 @@
                 innovative compositions that resonate deeply and elevate every project.
             </p>
             <div class="image-container mb-8">
-                <img src="/images/about.jpg" alt="Social Media" class=" w-[200px] h-[200px] fade-in " @load="fadeInImage" />
+                <img src="/images/about.jpg" alt="Social Media" class="w-[200px] h-[200px] object-cover fade-in" @load="fadeInImage" />
             </div>
             <div class="contact-section mt-12 mb-8">
                 <h2 class="text-xl font-kormelink italic mb-6">Get in Touch</h2>
