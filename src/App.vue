@@ -28,6 +28,7 @@ const logoRef = ref(null)
 const splashScreen = ref(null)
 const splashContent = ref(null)
 const loaderLine = ref(null)
+const menuVideo = ref<HTMLVideoElement | null>(null)
 
 const projects: Project[] = [
   {
@@ -70,6 +71,7 @@ const isMenuOpen = ref(false)
 
 // Initialize GSAP timeline
 const menuTimeline = gsap.timeline({ paused: true })
+const menuVideoTimeline = gsap.timeline({ paused: true })
 
 const route = useRoute()
 const carouselRef = ref<InstanceType<typeof MediaCarousel> | null>(null)
@@ -136,6 +138,16 @@ onMounted(() => {
     y: 20
   })
 
+  gsap.set('.menu-item', {
+    opacity: 0,
+    x: -32
+  })
+
+  gsap.set('.menu-video', {
+    opacity: 1,
+    clipPath: 'inset(0 100% 0 0)',
+  })
+
   // Animate logo
   gsap.to(logoRef.value, {
     opacity: 1,
@@ -143,11 +155,6 @@ onMounted(() => {
     duration: 0.8,
     ease: 'power3.out',
     delay: 0.2
-  })
-
-  gsap.set('.menu-item', {
-    opacity: 0,
-    x: -32
   })
 
   // Create menu animation timeline
@@ -165,6 +172,15 @@ onMounted(() => {
       ease: 'power3.out'
     }, '-=0.3')
 
+  // Create separate timeline for video
+  menuVideoTimeline
+    .to('.menu-video', {
+      clipPath: 'inset(0 0% 0 0)',
+      duration: 1.2,
+      delay: 0.5,
+      ease: 'power2.inOut'
+    })
+
   // Force play all videos for iOS
   const videos = document.querySelectorAll('video')
   videos.forEach(video => {
@@ -172,6 +188,13 @@ onMounted(() => {
       console.log("Video play failed:", error)
     })
   })
+
+  // Add specific handling for menu video
+  if (menuVideo.value) {
+    menuVideo.value.play().catch(error => {
+      console.log("Menu video play failed:", error)
+    })
+  }
 })
 
 const toggleMenu = () => {
@@ -179,8 +202,10 @@ const toggleMenu = () => {
 
   if (isMenuOpen.value) {
     menuTimeline.play()
+    menuVideoTimeline.timeScale(1).play()
   } else {
     menuTimeline.reverse()
+    menuVideoTimeline.timeScale(3).reverse() // 3x faster on reverse
   }
 }
 
@@ -196,8 +221,10 @@ const handleLogoClick = () => {
   if (isMenuOpen.value) {
     isMenuOpen.value = false
     menuTimeline.reverse()
+    menuVideoTimeline.timeScale(3).reverse() // 3x faster on reverse
+
   }
-  
+
   // Scroll to top
   gsap.to(window, {
     scrollTo: { y: 0 },
@@ -242,24 +269,30 @@ const handleLogoClick = () => {
     <main class="w-screen mt-[100px]">
       <div ref="menuDrawer" class="fixed inset-0 z-40 bg-white mt-[94px]">
         <nav class="menu-nav p-8 md:p-14">
-<router-link v-for="(project, index) in projects" :key="project.title"
-  :to="'/' + project.title.toLowerCase().replace(' ', '-')"
-  class="menu-item block text-3xl md:text-4xl lg:text-5xl mb-6 md:mb-8 font-kormelink transition-opacity uppercase relative border-b-[1px] pt-4 pb-4 opacity-0 -translate-x-8"
-  @mouseenter="() => handleMouseEnter(index)" @mouseleave="() => handleMouseLeave" @click="toggleMenu">
-  <div class="flex items-center group">
-    <!-- <span class="text-sm md:text-sm opacity-50 w-[60px]">(0{{ index + 1 }})</span> -->
-    <h2 class="flex-1 group-hover:translate-x-6 group-hover:opacity-60 transition duration-300">
-      {{ project.title }}
-    </h2>
-  </div>
-</router-link>
+          <router-link v-for="(project, index) in projects" :key="project.title"
+            :to="'/' + project.title.toLowerCase().replace(' ', '-')"
+            class="menu-item block text-3xl md:text-4xl lg:text-5xl mb-6 md:mb-8 font-kormelink transition-opacity uppercase relative border-b-[1px] pt-4 pb-4 opacity-0 -translate-x-8"
+            @mouseenter="() => handleMouseEnter(index)" @mouseleave="() => handleMouseLeave" @click="toggleMenu">
+            <div class="flex items-center group">
+              <h2 class="flex-1 group-hover:translate-x-6 group-hover:opacity-60 transition duration-300">
+                {{ project.title }}
+              </h2>
+            </div>
+          </router-link>
+
+          <!-- Menu Video -->
+          <div
+            class="menu-video w-[200px] h-[100px] md:w-[300px] md:h-[150px] md:mt-[50px] overflow-hidden bg-black/5 mt-10">
+            <video ref="menuVideo" autoplay loop muted playsinline class="w-full h-full object-cover opacity-80">
+              <source src="/videos/duality.mov" type="video/mp4" />
+              <source src="/videos/duality.mov" type="video/quicktime" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
         </nav>
         <div class="hidden md:block">
           <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" :isMenuOpen="isMenuOpen" />
         </div>
-        <!-- <transition name="fade">
-          <ShaderComponent v-if="isMenuOpen" shaderImage="/images/about.png" />
-        </transition> -->
       </div>
 
       <MediaCarousel v-show="showCarousel" ref="carouselRef" class="mt-[150px]" />
