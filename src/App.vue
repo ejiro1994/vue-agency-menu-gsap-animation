@@ -110,30 +110,21 @@ watch(() => route.path, (newPath) => {
   }
 })
 
-onMounted(() => {
-  // Create splash screen animation timeline
-  const splashTimeline = gsap.timeline()
+// Add new ref for loading state
+const loadingComplete = ref(false)
 
-  // Animate splash content first
-  splashTimeline
-    .from(splashContent.value, {
-      opacity: 0,
-      duration: 0.8,
-      ease: 'power3.out'
-    })
-    .to(loaderLine.value, {
-      strokeDashoffset: 0,
-      duration: 1.5,
-      ease: 'power2.inOut'
-    }, '-=0.4')
-    .to([splashContent.value, loaderLine.value], {
-      opacity: 0,
-      duration: 0.8,
-      ease: 'power3.inOut'
-    }, '+=0.1')
-    .add(() => {
+// Add function to handle explore button click
+const handleExplore = () => {
+  // First fade out the splash content
+  gsap.to([splashContent.value, loaderLine.value], {
+    opacity: 0,
+    duration: 0.8,
+    ease: 'power3.inOut',
+    onComplete: () => {
+      // After content fades, proceed with the rest
       // Signal that splash screen animation is complete
       globalEvents.splashScreenComplete = true
+
       // Only open menu if we're on the home page
       if (route.path === '/') {
         toggleMenu()
@@ -143,7 +134,7 @@ onMounted(() => {
           .to(splashScreen.value, {
             opacity: 0,
             duration: 0.5,
-            delay: 0, // Wait for menu to be mostly visible
+            delay: 0,
             ease: 'power3.inOut',
             onComplete: () => {
               if (splashScreen.value) {
@@ -164,7 +155,55 @@ onMounted(() => {
           }
         })
       }
+    }
+  })
+}
+
+onMounted(() => {
+  // Create different timelines for home and other pages
+  const splashTimeline = gsap.timeline({
+    onComplete: () => {
+      // If not home page, continue with fade out
+      if (route.path !== '/') {
+        gsap.to([splashContent.value, loaderLine.value], {
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power3.inOut',
+          onComplete: () => {
+            globalEvents.splashScreenComplete = true
+            // Remove splash screen
+            if (splashScreen.value) {
+              gsap.to(splashScreen.value, {
+                opacity: 0,
+                duration: 1,
+                ease: 'power3.inOut',
+                onComplete: () => {
+                  if (splashScreen.value) {
+                    (splashScreen.value as HTMLElement).style.display = 'none'
+                  }
+                }
+              })
+            }
+          }
+        })
+      } else {
+        loadingComplete.value = true
+      }
+    }
+  })
+
+  // Animate splash content first
+  splashTimeline
+    .from(splashContent.value, {
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power3.out'
     })
+    .to(loaderLine.value, {
+      strokeDashoffset: 0,
+      duration: 1.5,
+      ease: 'power2.inOut'
+    }, '-=0.4')
 
   // After splash screen animation, animate the main logo
   splashTimeline.add(() => {
@@ -309,11 +348,16 @@ const handleEmailClick = () => {
   <div>
     <!-- Splash Screen -->
     <div ref="splashScreen" class="fixed inset-0 z-[60] bg-white flex flex-col items-center justify-center">
-      <div ref="splashContent" class="text-center mb-8 flex flex-col items-center">
+      <div ref="splashContent" class="text-center mb-8 flex flex-col items-center min-h-[200px]">
+        
         <h1 class="text-l mb-4 font-kormelink mt-10">Film Scores, Albums<br>and <span
             class="fancy-text text-2xl tracking-wide">L</span>ive Performances</h1>
-        <!-- <img :src="brandLogo" :width="70" alt="Logo" class=" mt-[150px] mb-4" /> -->
-        <img :src="iconLogo" :width="15" alt="Logo" class=" mb-[150px] mt-2" />
+        <Transition name="fade">
+          <button v-if="loadingComplete && route.path === '/'" @click="handleExplore"
+            class="explore-button px-8 py-3 uppercase font-kormelink text-lg border border-[#8a7b5c]/30 hover:bg-[#8a7b5c] hover:text-white transition-colors duration-300 absolute mt-[140px]">
+            Explore
+          </button>
+        </Transition>
       </div>
       <svg class="w-[40%] h-2" viewBox="0 0 100 2" preserveAspectRatio="none">
         <line ref="loaderLine" x1="0" y1="1" x2="100" y2="1" stroke="#000" opacity="0.7" stroke-width="0.2"
@@ -367,16 +411,8 @@ const handleEmailClick = () => {
           <!-- Menu Video -->
           <div
             class="menu-video w-[200px] h-[100px] md:w-[300px] md:h-[150px] md:mt-[50px] overflow-hidden bg-black/5 mt-10">
-            <video ref="menuVideo" 
-              autoplay 
-              loop 
-              muted 
-              playsinline
-              defaultMuted
-              webkit-playsinline
-              preload="auto"
-              disablePictureInPicture
-              class="w-full h-full object-cover opacity-80">
+            <video ref="menuVideo" autoplay loop muted playsinline defaultMuted webkit-playsinline preload="auto"
+              disablePictureInPicture class="w-full h-full object-cover opacity-80">
               <source src="/videos/duality.mov" type="video/mp4" />
               <source src="/videos/duality.mov" type="video/quicktime" />
               Your browser does not support the video tag.
@@ -407,6 +443,23 @@ const handleEmailClick = () => {
 </template>
 
 <style scoped>
+.explore-button {
+  opacity: 0;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .fade-enter-active {
   transition: all 2s ease;
   transition-delay: 1s;
@@ -473,7 +526,8 @@ const handleEmailClick = () => {
 
 .menu-button {
   @apply uppercase text-[20px] font-medium hover:opacity-70 flex items-center;
-  height: 78px; /* Match the nav-container height */
+  height: 78px;
+  /* Match the nav-container height */
   transition: opacity 0.8s ease, transform 0.3s ease;
 }
 </style>

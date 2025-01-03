@@ -135,7 +135,7 @@ const smoothUpdateProgress = () => {
     if (audio.duration) {
         const progressPercent = (audio.currentTime / audio.duration) * 100
         progress.value = progressPercent
-        
+
         const progressLine = document.querySelector('.progress-line') as HTMLElement
         if (progressLine) {
             progressLine.style.transform = `scaleX(${progressPercent / 100})`
