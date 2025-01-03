@@ -129,6 +129,21 @@ const loadTrackDuration = async (track: Track): Promise<void> => {
     })
 }
 
+let animationFrameId: number | null = null
+
+const smoothUpdateProgress = () => {
+    if (audio.duration) {
+        const progressPercent = (audio.currentTime / audio.duration) * 100
+        progress.value = progressPercent
+        
+        const progressLine = document.querySelector('.progress-line') as HTMLElement
+        if (progressLine) {
+            progressLine.style.transform = `scaleX(${progressPercent / 100})`
+        }
+    }
+    animationFrameId = requestAnimationFrame(smoothUpdateProgress)
+}
+
 const togglePlay = () => {
     if (currentTrackIndex.value === -1) {
         playTrack(0)
@@ -137,8 +152,13 @@ const togglePlay = () => {
 
     if (isPlaying.value) {
         audio.pause()
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId)
+            animationFrameId = null
+        }
     } else {
         audio.play()
+        smoothUpdateProgress()
     }
     isPlaying.value = !isPlaying.value
 }
@@ -153,6 +173,7 @@ const playTrack = (index: number) => {
     audio.src = playlist.value[index].url
     audio.play()
     isPlaying.value = true
+    smoothUpdateProgress()
 
     gsap.to(window, {
         duration: 2.5,
@@ -171,27 +192,6 @@ const playTrack = (index: number) => {
     }
 }
 
-const updateProgress = () => {
-    if (audio.duration) {
-        const progressPercent = (audio.currentTime / audio.duration) * 100
-        // Update both the indicator and line position
-        gsap.to(progress, {
-            value: progressPercent,
-            duration: 0.1,
-            ease: "linear"
-        })
-        // Animate the progress line
-        const progressLine = document.querySelector('.progress-line') as HTMLElement
-        if (progressLine) {
-            gsap.to(progressLine, {
-                scaleX: progressPercent / 100,
-                duration: 0.1,
-                ease: "linear"
-            })
-        }
-    }
-}
-
 const seek = (event: MouseEvent) => {
     const progressBar = event.currentTarget as HTMLElement
     const rect = progressBar.getBoundingClientRect()
@@ -201,10 +201,13 @@ const seek = (event: MouseEvent) => {
 
 // Load all track durations when component mounts
 onMounted(async () => {
-    audio.addEventListener('timeupdate', updateProgress)
     audio.addEventListener('ended', () => {
         isPlaying.value = false
         progress.value = 0
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId)
+            animationFrameId = null
+        }
     })
 
     // Load durations for all tracks
@@ -214,7 +217,9 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
-    audio.removeEventListener('timeupdate', updateProgress)
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId)
+    }
     audio.pause()
 })
 </script>
@@ -275,7 +280,7 @@ onUnmounted(() => {
     position: absolute;
     top: 0;
     left: 0;
-    width: 0;
+    width: 100%;
     height: 100%;
     background: #000000;
     transform-origin: left;

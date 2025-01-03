@@ -8,10 +8,7 @@ import AboutPage from '../views/AboutPage.vue'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    {
-      path: '/',
-      redirect: '/music'
-    },
+  
     {
       path: '/music',
       name: 'Music',

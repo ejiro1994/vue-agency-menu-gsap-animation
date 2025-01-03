@@ -3,7 +3,7 @@ import ListOfItems from './components/List/ListOfItems.vue'
 import type { Project } from './types/Project'
 import ModalCursor from './components/ModalCursor.vue'
 import Playlist from './components/Playlist.vue'
-import { reactive, ref, provide, onMounted, computed } from 'vue'
+import { reactive, ref, provide, onMounted, computed, watch } from 'vue'
 import brandLogo from './assets/images/brand-logo.svg'
 import iconLogo from './assets/images/logo-icon.svg'
 import { Carousel, Slide } from 'vue3-carousel'
@@ -81,24 +81,43 @@ const showCarousel = computed(() => {
   return ['/music', '/film-scores', '/live-performances'].includes(route.path)
 })
 
+const showPlaylist = computed(() => {
+  return route.path !== '/'
+})
+
+const showCloseButton = computed(() => {
+  return route.path !== '/'
+})
+
+// Add new ref for menu button visibility
+const showMenuButton = ref(false)
+
+// Modify the watch function for route changes
+watch(() => route.path, (newPath) => {
+  // Close menu when route changes, but only if it's open
+  if (isMenuOpen.value) {
+    toggleMenu()
+  }
+
+  // Reset menu button visibility
+  showMenuButton.value = false
+
+  // Add delay before showing menu button
+  if (newPath !== '/') {
+    setTimeout(() => {
+      showMenuButton.value = true
+    }, 1500) // 2 second delay to match your fade transition timing
+  }
+})
+
 onMounted(() => {
   // Create splash screen animation timeline
-  const splashTimeline = gsap.timeline({
-    onComplete: () => {
-      // Remove splash screen from DOM after animation
-      if (splashScreen.value) {
-        (splashScreen.value as HTMLElement).style.display = 'none'
-        // Signal that splash screen animation is complete
-        globalEvents.splashScreenComplete = true
-      }
-    }
-  })
+  const splashTimeline = gsap.timeline()
 
   // Animate splash content first
   splashTimeline
     .from(splashContent.value, {
       opacity: 0,
-      // scale: 0.9,
       duration: 0.8,
       ease: 'power3.out'
     })
@@ -109,15 +128,43 @@ onMounted(() => {
     }, '-=0.4')
     .to([splashContent.value, loaderLine.value], {
       opacity: 0,
-      // scale: 1.1,
-      duration: 0.5,
-      ease: 'power3.in'
-    }, '+=0.2')
-    .to(splashScreen.value, {
-      yPercent: -100,
       duration: 0.8,
       ease: 'power3.inOut'
-    }, '-=0.3')
+    }, '+=0.1')
+    .add(() => {
+      // Signal that splash screen animation is complete
+      globalEvents.splashScreenComplete = true
+      // Only open menu if we're on the home page
+      if (route.path === '/') {
+        toggleMenu()
+        // Create a timeline for removing splash screen after menu loads
+        const removeSpashTimeline = gsap.timeline()
+        removeSpashTimeline
+          .to(splashScreen.value, {
+            opacity: 0,
+            duration: 0.5,
+            delay: 0, // Wait for menu to be mostly visible
+            ease: 'power3.inOut',
+            onComplete: () => {
+              if (splashScreen.value) {
+                (splashScreen.value as HTMLElement).style.display = 'none'
+              }
+            }
+          })
+      } else {
+        // If not on home page, fade out splash screen
+        gsap.to(splashScreen.value, {
+          opacity: 0,
+          duration: 1,
+          ease: 'power3.inOut',
+          onComplete: () => {
+            if (splashScreen.value) {
+              (splashScreen.value as HTMLElement).style.display = 'none'
+            }
+          }
+        })
+      }
+    })
 
   // After splash screen animation, animate the main logo
   splashTimeline.add(() => {
@@ -197,21 +244,30 @@ onMounted(() => {
   }
 })
 
+// Add this new ref to track the button text independently
+const buttonText = ref('Menu')
+
+// Modify the toggleMenu function
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 
-  // Toggle body scroll
+  // Update button text immediately when opening
   if (isMenuOpen.value) {
+    buttonText.value = 'Close'
     document.body.style.overflow = 'hidden'
     menuTimeline.play()
     menuVideoTimeline.timeScale(1).play()
   } else {
+    // Don't change button text immediately when closing
     document.body.style.overflow = ''
     menuTimeline.reverse()
-    menuVideoTimeline.timeScale(3).reverse() // 3x faster on reverse
+    menuVideoTimeline.timeScale(3).reverse()
+    // Only update button text after the animation/transition
+    setTimeout(() => {
+      buttonText.value = 'Menu'
+    }, 500) // Adjust timing to match your fade transition
   }
 }
-
 
 const goToSlide = (slideIndex: number) => {
   carouselRef.value?.slideTo(slideIndex)
@@ -265,20 +321,22 @@ const handleEmailClick = () => {
           inquire
         </button> -->
         <div class="logo-container">
-          <router-link to="/" @click="handleLogoClick">
+          <router-link to="/music" @click="handleLogoClick">
             <div ref="logoRef">
               <img :src="brandLogo" :width="120" alt="Logo" class="opacity-90 2xl:w-[130px]" />
             </div>
           </router-link>
         </div>
         <div class="invisible lg:visible"><!-- Spacer for desktop layout --></div>
-        <button class="menu-button" @click="toggleMenu">
-          {{ isMenuOpen ? 'Close' : 'Menu' }}
-        </button>
+        <Transition name="fade">
+          <button v-if="showCloseButton && showMenuButton" class="menu-button" @click="toggleMenu">
+            {{ buttonText }}
+          </button>
+        </Transition>
       </div>
     </nav>
-    <main class="w-screen mt-[100px]">
-      <div ref="menuDrawer" class="fixed inset-0 z-40 bg-white mt-[94px]">
+    <main class="w-screen mt-[85px] md:mt-[94px] lg:mt-[100px]">
+      <div ref="menuDrawer" class="fixed inset-0 z-40 bg-white mt-[78px]">
         <nav class="menu-nav p-8 md:p-14">
           <router-link v-for="(project, index) in projects" :key="project.title"
             :to="'/' + project.title.toLowerCase().replace(' ', '-')"
@@ -313,10 +371,12 @@ const handleEmailClick = () => {
           <ModalCursor ref="modalCursor" :projects="projects" :modalState="modalState" :isMenuOpen="isMenuOpen" />
         </div>
       </div>
+      <!-- <template v-if="showPlaylist"> -->
+      <MediaCarousel v-show="showCarousel" ref="carouselRef" class="mt-0" />
+      <!-- <Playlist/> -->
+      <!-- </template> -->
 
-      <MediaCarousel v-show="showCarousel" ref="carouselRef" class="mt-[150px]" />
-
-      <router-view v-slot="{ Component }">
+      <router-view v-slot="{ Component }" v-if="showPlaylist">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
         </transition>
@@ -332,19 +392,18 @@ const handleEmailClick = () => {
 
 <style scoped>
 .fade-enter-active {
-  transition-delay: 2s;
-  transition: opacity 0.5s ease;
-
+  transition: all 2s ease;
+  transition-delay: 1s;
 }
 
-
 .fade-leave-active {
-  transition: opacity 0.5s ease;
+  transition: all 0.5s ease;
 }
 
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+  /* transform: translateY(-20px); */
 }
 
 .menu-nav {
@@ -371,19 +430,34 @@ const handleEmailClick = () => {
 }
 
 .nav-container {
-  @apply fixed top-0 w-full py-6 px-[14px] z-50 bg-white;
+  @apply fixed top-0 w-full z-50 bg-white;
+  height: 78px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
 }
 
 .nav-content {
-  @apply flex justify-between items-center font-kormelink;
+  @apply flex justify-between items-center w-full font-kormelink;
   @apply lg:container lg:mx-auto lg:max-w-7xl lg:relative;
+  height: 100%;
 }
 
 .logo-container {
-  @apply lg:absolute lg:left-1/2 lg:-translate-x-1/2;
+  /* Mobile styles */
+  @apply relative left-0 translate-x-0;
+  /* Tablet and desktop styles */
+  @apply md:absolute md:left-1/2 md:-translate-x-1/2;
+}
+
+/* Optional: adjust the invisible spacer to only show on desktop */
+.invisible {
+  @apply hidden md:block;
 }
 
 .menu-button {
-  @apply uppercase text-[20px] font-medium hover:opacity-70 transition-opacity;
+  @apply uppercase text-[20px] font-medium hover:opacity-70 flex items-center;
+  height: 78px; /* Match the nav-container height */
+  transition: opacity 0.8s ease, transform 0.3s ease;
 }
 </style>
