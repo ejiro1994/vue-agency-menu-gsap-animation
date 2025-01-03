@@ -238,8 +238,15 @@ onMounted(() => {
 
   // Add specific handling for menu video
   if (menuVideo.value) {
+    // Set muted explicitly
+    menuVideo.value.muted = true
+    // Try playing immediately
     menuVideo.value.play().catch(error => {
       console.log("Menu video play failed:", error)
+      // If initial play fails, try again after user interaction
+      document.addEventListener('touchstart', () => {
+        menuVideo.value?.play()
+      }, { once: true })
     })
   }
 })
@@ -360,7 +367,16 @@ const handleEmailClick = () => {
           <!-- Menu Video -->
           <div
             class="menu-video w-[200px] h-[100px] md:w-[300px] md:h-[150px] md:mt-[50px] overflow-hidden bg-black/5 mt-10">
-            <video ref="menuVideo" autoplay loop muted playsinline class="w-full h-full object-cover opacity-80">
+            <video ref="menuVideo" 
+              autoplay 
+              loop 
+              muted 
+              playsinline
+              defaultMuted
+              webkit-playsinline
+              preload="auto"
+              disablePictureInPicture
+              class="w-full h-full object-cover opacity-80">
               <source src="/videos/duality.mov" type="video/mp4" />
               <source src="/videos/duality.mov" type="video/quicktime" />
               Your browser does not support the video tag.
