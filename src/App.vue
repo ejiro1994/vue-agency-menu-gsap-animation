@@ -354,7 +354,7 @@ const handleEmailClick = () => {
             class="fancy-text text-2xl tracking-wide">L</span>ive Performances</h1>
         <Transition name="fade">
           <button v-if="loadingComplete && route.path === '/'" @click="handleExplore"
-            class="explore-button px-8 py-3 uppercase font-kormelink text-lg border border-[#8a7b5c]/30 hover:bg-[#8a7b5c] hover:text-white transition-colors duration-300 absolute mt-[140px]">
+            class="explore-button px-8 pt-4 pb-3  uppercase font-kormelink text-lg border border-[#8a7b5c]/30 hover:bg-[#8a7b5c] hover:text-white transition-colors duration-300 absolute mt-[140px]">
             Explore
           </button>
         </Transition>

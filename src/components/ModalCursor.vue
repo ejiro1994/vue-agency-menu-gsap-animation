@@ -76,6 +76,13 @@ onMounted(() => {
             Your browser does not support the video tag.
           </video>
         </template>
+        <template v-else-if="title === 'live performances'">
+          <video autoplay loop muted playsinline class="w-[300px]">
+            <source src="/videos/unknownt.mov" type="video/mp4" />
+            <source src="/videos/unknownt.mov" type="video/quicktime" />
+            Your browser does not support the video tag.
+          </video>
+        </template>
         <template v-else>
           <img :src="`/images/${src}`" alt="image" class="w-[300px]" />
         </template>
