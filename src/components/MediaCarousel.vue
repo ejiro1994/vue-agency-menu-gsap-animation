@@ -62,7 +62,8 @@ const slides: MediaSlide[] = [
   { type: 'image', src: '/images/carousel/2.png', alt: 'Project Image 2' },
   { type: 'image', src: '/images/carousel/3.png', alt: 'Project Image 3' },
   { type: 'image', src: '/images/carousel/4.png', alt: 'Project Image 4' },
-  { type: 'image', src: '/images/carousel/5.png', alt: 'Project Image 5' }
+  { type: 'image', src: '/images/carousel/5.png', alt: 'Project Image 5' },
+  { type: 'image', src: '/images/carousel/skin.png', alt: 'Skin (short film)' }
 ]
 
 const loadedCount = ref(0)

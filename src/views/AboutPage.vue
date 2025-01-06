@@ -1,31 +1,36 @@
 <template>
     <div class="page-container">
-        
+
         <!-- <h1 class="page-title font-kormelink  mt-4">Behind the Music</h1> -->
         <div class="content">
-            <p class="mb-4 uppercase pt-2">
+            <p class="mb-4 uppercase pt-2S">
                 I'm a string arranger and producer from West London, dedicated to creating emotive, bespoke arrangements
                 that bring stories to life through music. With a deep passion for blending classical traditions with
                 contemporary sounds, I collaborate with artists, filmmakers and producers to deliver timeless and
                 innovative compositions that resonate deeply and elevate every project.
             </p>
             <div class="image-container mb-8">
-                <img src="/images/about.jpg" alt="Social Media" class="w-[200px] h-[200px] object-cover fade-in" @load="fadeInImage" />
+                <img src="/images/about.jpg" alt="Social Media" class="w-[200px] h-[200px] object-cover fade-in"
+                    @load="fadeInImage" />
             </div>
             <div class="contact-section mt-12 mb-8">
                 <h2 class="text-xl font-kormelink italic mb-6">Get in Touch</h2>
                 <div class="contact-links space-y-4">
-                    <a href="mailto:hello@ejirolennox.com" class="contact-link font-kormelink text-lg hover:opacity-70 transition-opacity uppercase block">
+                    <a href="mailto:hello@ejirolennox.com"
+                        class="contact-link font-kormelink text-lg hover:opacity-70 transition-opacity uppercase block">
                         hello@ejirolennox.com
                     </a>
                     <div class="social-links flex gap-6 pt-4">
-                        <a href="https://instagram.com/ejirolennox" target="_blank" rel="noopener noreferrer" class="contact-link font-kormelink text-lg hover:opacity-70 transition-opacity uppercase">
+                        <a href="https://instagram.com/ejirolennox" target="_blank" rel="noopener noreferrer"
+                            class="contact-link font-kormelink text-lg hover:opacity-70 transition-opacity uppercase">
                             Instagram
                         </a>
-                        <a href="https://twitter.com/ejirolennox" target="_blank" rel="noopener noreferrer" class="contact-link font-kormelink text-lg hover:opacity-70 transition-opacity uppercase">
+                        <a href="https://twitter.com/ejirolennox" target="_blank" rel="noopener noreferrer"
+                            class="contact-link font-kormelink text-lg hover:opacity-70 transition-opacity uppercase">
                             Twitter
                         </a>
-                        <a href="https://youtube.com/@ejirolennox" target="_blank" rel="noopener noreferrer" class="contact-link font-kormelink text-lg hover:opacity-70 transition-opacity uppercase">
+                        <a href="https://youtube.com/@ejirolennox" target="_blank" rel="noopener noreferrer"
+                            class="contact-link font-kormelink text-lg hover:opacity-70 transition-opacity uppercase">
                             Youtube
                         </a>
                     </div>
@@ -36,15 +41,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 const fadeInImage = (event: Event) => {
-    const img = event.target as HTMLImageElement;
+    const img = event.target as HTMLImageElement
     // Ensure the class is added after the image is fully loaded
     setTimeout(() => {
-        img.classList.add('visible');
-    }, 1000); // 2-second delay before adding the class
-};
+        img.classList.add('visible')
+    }, 1000) // 2-second delay before adding the class
+}
 </script>
 
 <style scoped>

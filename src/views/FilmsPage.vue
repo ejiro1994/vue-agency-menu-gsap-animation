@@ -2,7 +2,7 @@
   <div class="page-container">
     <h1 class="page-title font-kormelink italic mt-4"><span class="">F</span>ilms</h1>
     <p class="font-kormelink italic text-xs px-4 text-gray-500 mb-8">
-      "Ever wondered why some film scores stay with you forever? It’s the strings."
+      "Ever wondered why some film scores stay with you forever? It's the strings."
     </p>
     <div class="content-container">
       <Playlist :filter="'FILM'" />

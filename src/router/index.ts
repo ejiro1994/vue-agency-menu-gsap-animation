@@ -8,7 +8,6 @@ import AboutPage from '../views/AboutPage.vue'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-  
     {
       path: '/music',
       name: 'Music',

@@ -95,6 +95,12 @@ const allTracks = ref<Track[]>([
         artist: 'V\'NESSA',
         duration: '0:38',
         url: '/playlist/deep.m4a'
+    },
+    {
+        title: 'SKIN (SHORT FILM)',
+        artist: 'FELI',
+        duration: '0:38',
+        url: '/playlist/skin.mp3'
     }
 ])
 

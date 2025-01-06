@@ -48,7 +48,7 @@ const projects: Project[] = [
   },
   {
     title: 'about',
-    src: 'about.png',
+    src: 'about.jpg',
     color: '#F5F5F5'
   }
 ]
@@ -121,6 +121,14 @@ const handleExplore = () => {
     duration: 0.8,
     ease: 'power3.inOut',
     onComplete: () => {
+      // Animate the logo upwards
+      gsap.from(logoRef.value, {
+        y: 5, // Adjust the value as needed for the desired upward movement
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.inOut'
+      })
+
       // After content fades, proceed with the rest
       // Signal that splash screen animation is complete
       globalEvents.splashScreenComplete = true
@@ -349,12 +357,12 @@ const handleEmailClick = () => {
     <!-- Splash Screen -->
     <div ref="splashScreen" class="fixed inset-0 z-[60] bg-white flex flex-col items-center justify-center">
       <div ref="splashContent" class="text-center mb-8 flex flex-col items-center min-h-[200px]">
-        
-        <h1 class="text-l mb-4 font-kormelink mt-10">Film Scores, Albums<br>and <span
-            class="fancy-text text-2xl tracking-wide">L</span>ive Performances</h1>
+
+        <h1 class="text-l lg:text-xl mb-4 font-kormelink mt-10">Film Scores, Albums<br>and <span
+            class="fancy-text text-2xl lg:text-2xl tracking-wide">L</span>ive Performances</h1>
         <Transition name="fade">
           <button v-if="loadingComplete && route.path === '/'" @click="handleExplore"
-            class="explore-button px-8 pt-4 pb-3  uppercase font-kormelink text-lg border border-[#8a7b5c]/30 hover:bg-[#8a7b5c] hover:text-white transition-colors duration-300 absolute mt-[140px]">
+            class="explore-button px-8 pt-4 pb-3  uppercase font-kormelink text-lg border border-[#8a7b5c]/30 hover:bg-[#8a7b5c] hover:text-white transition-colors duration-300 absolute mt-[140px] lg:text-xl">
             Explore
           </button>
         </Transition>
@@ -374,7 +382,8 @@ const handleEmailClick = () => {
         <div class="logo-container">
           <router-link to="/music" @click="handleLogoClick">
             <div ref="logoRef">
-              <img :src="brandLogo" :width="120" alt="Logo" class="opacity-90 2xl:w-[130px]" />
+              <img :src="brandLogo" :width="120" alt="Logo"
+                class="opacity-90 2xl:w-[150px] xl:w-[140px] 2xl:mt-4 lg:w-[130px]" />
             </div>
           </router-link>
         </div>
@@ -391,7 +400,7 @@ const handleEmailClick = () => {
         <nav class="menu-nav p-8 md:p-14">
           <router-link v-for="(project, index) in projects" :key="project.title"
             :to="'/' + project.title.toLowerCase().replace(' ', '-')"
-            class="menu-item block text-3xl md:text-4xl lg:text-5xl mb-6 md:mb-8 font-kormelink transition-opacity uppercase relative border-b-[1px] pt-4 pb-4 opacity-0 -translate-x-8"
+            class="menu-item block text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-6 md:mb-8 font-kormelink transition-opacity uppercase relative border-b-[1px] pt-4 pb-4 opacity-0 -translate-x-8"
             @mouseenter="() => handleMouseEnter(index)" @mouseleave="() => handleMouseLeave" @click="toggleMenu">
             <div class="flex items-center group">
               <h2 class="flex-1 group-hover:translate-x-6 group-hover:opacity-60 transition duration-300">
