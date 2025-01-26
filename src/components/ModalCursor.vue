@@ -64,27 +64,39 @@ onMounted(() => {
 
 <template>
   <div ref="modalContainer"
-    class="h-[350px] w-[400px] flex overflow-hidden items-center justify-center bg-[#FFFFFF] scale-0 absolute top-0 left-0 z-10 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+    class="xl:h-[350px] xl:w-[400px] lg:h-[320px] lg:w-[370px] md:h-[290px] md: w-[340px]  flex overflow-hidden items-center justify-center bg-[#FFFFFF] scale-0 absolute top-0 left-0 z-1000 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
     :class="{ 'hidden': !isMenuOpen }">
     <div :style="{ top: modalState.index * -100 + '%' }" class="ease-cubic-bezier-custom">
       <div v-for="({ title, src, color }, index) in projects" :key="`modal_${index}`"
         class="h-full w-full flex justify-center items-center" :style="{ backgroundColor: color || '#F5F5F5' }">
         <template v-if="title === 'film scores'">
-          <video autoplay loop muted playsinline class="w-[300px]">
+          <video autoplay loop muted playsinline class="w-[300px] xl:w-[300px] lg:w-[270px] md:w-[240px] " style="filter: sepia(1) hue-rotate(0deg) saturate(.1);">
             <source src="/videos/duality.mov" type="video/mp4" />
             <source src="/videos/duality.mov" type="video/quicktime" />
             Your browser does not support the video tag.
           </video>
         </template>
         <template v-else-if="title === 'live performances'">
-          <video autoplay loop muted playsinline class="w-[300px]">
+          <video autoplay loop muted playsinline class="w-[300px] xl:w-[300px] lg:w-[270px] md:w-[240px] " style="filter: sepia(1) hue-rotate(0deg) saturate(.1);" >
             <source src="/videos/unknownt.mov" type="video/mp4" />
             <source src="/videos/unknownt.mov" type="video/quicktime" />
             Your browser does not support the video tag.
           </video>
         </template>
+        <template v-else-if="title === 'weddings'">
+          <img src="/images/weddings.png" style="filter: sepia(1) contrast(120%) brightness(100%) hue-rotate(0deg) saturate(0);" alt="weddings image"
+            class="w-[300px] xl:w-[300px] lg:w-[270px] md:w-[240px] " />
+        </template>
+        <template v-else-if="title === 'music'">
+          <video autoplay loop muted playsinline class="xl:w-[300px] xl:h-[220px] lg:w-[270px] lg:h-[200px] md:w-[240px] md:h-[180px] "
+            style="filter: sepia(1) hue-rotate(0deg) saturate(.07); object-fit: cover;">
+            <source src="/videos/higher.mov" type="video/mp4" />
+            <source src="/videos/higher.mov" type="video/quicktime" />
+            Your browser does not support the video tag.
+          </video>
+        </template>
         <template v-else>
-          <img :src="`/images/${src}`" alt="image" class="w-[300px]" />
+          <img :src="`/images/${src}`" alt="image" class="w-[300px] xl:w-[300px] lg:w-[270px] md:w-[240px] " />
         </template>
       </div>
     </div>

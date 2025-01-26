@@ -3,7 +3,7 @@ import ListOfItems from './components/List/ListOfItems.vue'
 import type { Project } from './types/Project'
 import ModalCursor from './components/ModalCursor.vue'
 import Playlist from './components/Playlist.vue'
-import { reactive, ref, provide, onMounted, computed, watch } from 'vue'
+import { reactive, ref, provide, onMounted, computed, watch, nextTick } from 'vue'
 import brandLogo from './assets/images/brand-logo.svg'
 import iconLogo from './assets/images/logo-icon.svg'
 import { Carousel, Slide } from 'vue3-carousel'
@@ -29,11 +29,17 @@ const splashScreen = ref(null)
 const splashContent = ref(null)
 const loaderLine = ref(null)
 const menuVideo = ref<HTMLVideoElement | null>(null)
+const exploreButton = ref(null)
 
 const projects: Project[] = [
   {
     title: 'music',
     src: 'music.png',
+    color: '#FFFFFF'
+  },
+  {
+    title: 'weddings',
+    src: 'weddings.png',
     color: '#FFFFFF'
   },
   {
@@ -72,13 +78,14 @@ const isMenuOpen = ref(false)
 // Initialize GSAP timeline
 const menuTimeline = gsap.timeline({ paused: true })
 const menuVideoTimeline = gsap.timeline({ paused: true })
+const exploreButtonTimeline = gsap.timeline()
 
 const route = useRoute()
 const carouselRef = ref<InstanceType<typeof MediaCarousel> | null>(null)
 
 // Show carousel only on routes that need it
 const showCarousel = computed(() => {
-  return ['/music', '/film-scores', '/live-performances'].includes(route.path)
+  return ['/music', '/film-scores', '/live-performances', '/weddings'].includes(route.path)
 })
 
 const showPlaylist = computed(() => {
@@ -121,13 +128,7 @@ const handleExplore = () => {
     duration: 0.8,
     ease: 'power3.inOut',
     onComplete: () => {
-      // Animate the logo upwards
-      gsap.from(logoRef.value, {
-        y: 5, // Adjust the value as needed for the desired upward movement
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.inOut'
-      })
+
 
       // After content fades, proceed with the rest
       // Signal that splash screen animation is complete
@@ -209,7 +210,7 @@ onMounted(() => {
     })
     .to(loaderLine.value, {
       strokeDashoffset: 0,
-      duration: 1.5,
+      duration: 0.8,
       ease: 'power2.inOut'
     }, '-=0.4')
 
@@ -296,6 +297,22 @@ onMounted(() => {
       }, { once: true })
     })
   }
+
+  // Create a watcher for loadingComplete
+  watch(loadingComplete, (newValue) => {
+    if (newValue && route.path === '/') {
+      // Wait for next tick to ensure button is in DOM
+      nextTick(() => {
+        exploreButtonTimeline
+          .to(exploreButton.value, {
+            backgroundColor: '#8a7b5c',
+            color: 'white',
+            duration: 0.8,
+            ease: 'power2.inOut'
+          })
+      })
+    }
+  })
 })
 
 // Add this new ref to track the button text independently
@@ -336,33 +353,33 @@ const handleLogoClick = () => {
     document.body.style.overflow = ''
     menuTimeline.reverse()
     menuVideoTimeline.timeScale(3).reverse()
+    // Update button text after the animation/transition
+    setTimeout(() => {
+      buttonText.value = 'Menu'
+    }, 1100) // Adjust timing to match your fade transition
   }
-
-  // Scroll to top
-  gsap.to(window, {
-    scrollTo: { y: 0 },
-    duration: 2,
-    delay: 1,
-    ease: 'power4.inOut'
-  })
 }
 
-const handleEmailClick = () => {
-  window.location.href = 'mailto:lennox.akpoduado@gmail.com?subject=Project Collaboration Inquiry'
-}
+
 </script>
 
 <template>
   <div>
     <!-- Splash Screen -->
-    <div ref="splashScreen" class="fixed inset-0 z-[60] bg-white flex flex-col items-center justify-center">
+    <div ref="splashScreen" class="fixed inset-0 z-[60] bg-[#EDE9E5] flex flex-col items-center justify-center">
       <div ref="splashContent" class="text-center mb-8 flex flex-col items-center min-h-[200px]">
-
-        <h1 class="text-l lg:text-xl mb-4 font-kormelink mt-10">Film Scores, Albums<br>and <span
-            class="fancy-text text-2xl lg:text-2xl tracking-wide">L</span>ive Performances</h1>
+        <!-- Add separate wrappers for each line of text -->
+        <div class="text-mask">
+          <h1 class="text-l lg:text-xl mb-2 font-kormelink mt-10 reveal-text">Film Scores, Albums</h1>
+        </div>
+        <div class="text-mask">
+          <h1 class="text-l lg:text-xl mb-2 font-kormelink mt-2 reveal-text">
+            and <span class="fancy-text text-2xl lg:text-2xl tracking-wide">L</span>ive Performances
+          </h1>
+        </div>
         <Transition name="fade">
-          <button v-if="loadingComplete && route.path === '/'" @click="handleExplore"
-            class="explore-button px-8 pt-4 pb-3  uppercase font-kormelink text-lg border border-[#8a7b5c]/30 hover:bg-[#8a7b5c] hover:text-white transition-colors duration-300 absolute mt-[140px] lg:text-xl">
+          <button ref="exploreButton" v-if="loadingComplete && route.path === '/'" @click="handleExplore"
+            class="explore-button px-8 pt-4 pb-3 uppercase font-kormelink text-lg border border-[#9B8A50]/30 transition-colors duration-300 absolute mt-[140px] lg:text-xl">
             Explore
           </button>
         </Transition>
@@ -373,12 +390,9 @@ const handleEmailClick = () => {
       </svg>
     </div>
 
-    <nav class="nav-container">
+    <nav class="nav-container bg-[#EDE9E5]">
       <div class="nav-content">
-        <!-- <button @click="handleEmailClick"
-          class="hidden lg:block text-xl font-kormelink px-4 py-2 hover:bg-black hover:text-white transition-colors duration-300 uppercase border-b-[1px] border-b-black/50">
-          inquire
-        </button> -->
+   
         <div class="logo-container">
           <router-link to="/music" @click="handleLogoClick">
             <div ref="logoRef">
@@ -396,7 +410,7 @@ const handleEmailClick = () => {
       </div>
     </nav>
     <main class="w-screen mt-[85px] md:mt-[94px] lg:mt-[100px]">
-      <div ref="menuDrawer" class="fixed inset-0 z-40 bg-white mt-[78px]">
+      <div ref="menuDrawer" class="fixed inset-0 z-40 bg-[#EDE9E5] mt-[78px]">
         <nav class="menu-nav p-8 md:p-14">
           <router-link v-for="(project, index) in projects" :key="project.title"
             :to="'/' + project.title.toLowerCase().replace(' ', '-')"
@@ -409,13 +423,7 @@ const handleEmailClick = () => {
             </div>
           </router-link>
 
-          <!-- Mobile Contact Button -->
-          <!-- <button 
-            @click="handleEmailClick"
-            class="menu-item lg:hidden block text-3xl font-kormelink uppercase   px-6 pt-4 pb-3 border border-black/30 textblack-white transition-colors duration-300 mt-10 hover:bg-black hover:text-white"
-          >
-          inquire
-          </button> -->
+    
 
           <!-- Menu Video -->
           <div
@@ -508,7 +516,7 @@ const handleEmailClick = () => {
 }
 
 .nav-container {
-  @apply fixed top-0 w-full z-50 bg-white;
+  @apply fixed top-0 w-full z-50 bg-[#EDE9E5];
   height: 78px;
   display: flex;
   align-items: center;
@@ -538,5 +546,26 @@ const handleEmailClick = () => {
   height: 78px;
   /* Match the nav-container height */
   transition: opacity 0.8s ease, transform 0.3s ease;
+}
+
+/* Add styles for the text mask and reveal animation */
+.text-mask {
+  overflow: hidden;
+  display: inline-block;
+  margin-bottom: 0;
+  /* Remove extra spacing */
+}
+
+.reveal-text {
+  transform: translateY(100%);
+  animation: revealUp 0.8s ease forwards;
+  margin: 0;
+  /* Remove default margin */
+}
+
+@keyframes revealUp {
+  to {
+    transform: translateY(0);
+  }
 }
 </style>

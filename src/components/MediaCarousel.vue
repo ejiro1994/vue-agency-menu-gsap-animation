@@ -13,7 +13,7 @@
       <Slide v-for="(slide, index) in slides" :key="slide.src">
         <div class="w-full h-[250px] relative bg-black">
           <template v-if="slide.type === 'video'">
-            <div :ref="el => setMediaContainer(el as HTMLElement, index)" class="w-full h-full"></div>
+            <div :ref="el => setMediaContainer(el as HTMLElement, index)" class="w-full h-full" style="filter: sepia(1) hue-rotate(0deg) saturate(.15);"></div>
           </template>
           <img v-else
             :src="slide.src" 
@@ -36,7 +36,6 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 const carouselRef = ref<InstanceType<typeof Carousel> | null>(null)
 const loadedMedia = ref<Set<number>>(new Set())
-const videoRefs = ref<HTMLVideoElement[]>([])
 const showCarousel = ref(false)
 const mediaCache = ref<Map<string, HTMLVideoElement | HTMLImageElement>>(new Map())
 const mediaContainers = ref<(HTMLElement | null)[]>([])
