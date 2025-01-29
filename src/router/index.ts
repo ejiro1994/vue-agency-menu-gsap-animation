@@ -4,6 +4,7 @@ import FilmsPage from '../views/FilmsPage.vue'
 import LivePerformancesPage from '../views/LivePerformancesPage.vue'
 import ScorebookPage from '../views/ScorebookPage.vue'
 import AboutPage from '../views/AboutPage.vue'
+import WeddingsPage from '../views/WeddingsPage.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/about',
       name: 'About',
       component: AboutPage
+    },
+    {
+      path: '/weddings',
+      name: 'Weddings',
+      component: WeddingsPage
     }
   ]
 })

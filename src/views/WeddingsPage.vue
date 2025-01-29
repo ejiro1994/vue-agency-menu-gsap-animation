@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
-    <h1 class="page-title font-kormelink italic mt-4"><span
-        class="fancy-text text-2xl lg:text-2xl tracking-wide">W</span>eddings</h1>
+    <h1 class="page-title font-kormelink italic mt-4 text-3xl"><span
+        class="fancy-text text-5xl lg:text-5xl tracking-wide">W</span>eddings</h1>
     <p class="font-kormelink italic text-xs px-4 text-gray-500 mb-8">
       "In the symphony of love, strings weave the melodies that bind hearts together."
     </p>
