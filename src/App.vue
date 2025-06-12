@@ -358,6 +358,12 @@ const handleLogoClick = () => {
       buttonText.value = 'Menu'
     }, 1100) // Adjust timing to match your fade transition
   }
+
+  // Reset MediaCarousel to the first video/slide
+  // Only if the carousel is present
+  if (carouselRef.value && showCarousel.value) {
+    carouselRef.value.slideTo(1)
+  }
 }
 
 
