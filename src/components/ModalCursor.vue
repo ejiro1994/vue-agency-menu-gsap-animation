@@ -84,8 +84,8 @@ onMounted(() => {
           </video>
         </template>
         <template v-else-if="title === 'weddings'">
-          <img src="/images/weddings.png" style="filter: sepia(1) contrast(120%) brightness(100%) hue-rotate(0deg) saturate(0);" alt="weddings image"
-            class="w-[300px] xl:w-[300px] lg:w-[270px] md:w-[240px] " />
+          <img src="/images/weddings.jpg" style="filter: sepia(1) contrast(120%) brightness(100%) hue-rotate(0deg) saturate(0); object-position: bottom;" alt="weddings image"
+            class="w-[300px] xl:w-[300px] lg:w-[270px] md:w-[240px] h-[300px] xl:h-[300px] lg:h-[270px] md:h-[240px] object-cover" />
         </template>
         <template v-else-if="title === 'music'">
           <video autoplay loop muted playsinline class="xl:w-[300px] xl:h-[220px] lg:w-[270px] lg:h-[200px] md:w-[240px] md:h-[180px] "

@@ -1,40 +1,46 @@
 <template>
   <div class="carousel-wrapper">
-    <Carousel 
+    <div 
       ref="carouselRef" 
-      :perPage="1" 
-      :navigationEnabled="false" 
-      :touchDrag="false"
-      :mouseDrag="false"
-      :initialSlide="2"
-      class="w-full mb-8 overflow-hidden"
+      class="w-full mb-8 overflow-hidden custom-carousel"
       :class="{ 'opacity-0': !allMediaLoaded, 'opacity-100 transition-opacity duration-1000': allMediaLoaded }"
     >
-      <Slide v-for="(slide, index) in slides" :key="slide.src">
-        <div class="w-full h-[250px] relative bg-black">
-          <template v-if="slide.type === 'video'">
-            <div :ref="el => setMediaContainer(el as HTMLElement, index)" class="w-full h-full" style="filter: sepia(1) hue-rotate(0deg) saturate(.15);"></div>
-          </template>
-          <img v-else
-            :src="slide.src" 
-            :alt="slide.alt" 
-            class="w-full h-full object-cover"
-            @load="() => handleMediaLoaded(index)"
-          />
+      <div class="carousel-inner" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
+        <div 
+          v-for="(slide, index) in slides" 
+          :key="slide.src"
+          class="carousel-slide"
+        >
+          <div class="w-full h-[250px] relative bg-black">
+            <template v-if="slide.type === 'video'">
+              <div :ref="el => setMediaContainer(el as HTMLElement, index)" class="w-full h-full" style="filter: sepia(1) hue-rotate(0deg) saturate(.15);"></div>
+            </template>
+            <img v-else
+              :src="slide.src" 
+              :alt="slide.alt" 
+              class="w-full h-full object-cover"
+              @load="() => handleMediaLoaded(index)"
+            />
+          </div>
         </div>
-      </Slide>
-    </Carousel>
+      </div>
+      
+      <div class="carousel-controls" v-if="showControls">
+        <button @click="prevSlide" class="carousel-control prev">&lt;</button>
+        <button @click="nextSlide" class="carousel-control next">&gt;</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Carousel, Slide } from 'vue3-carousel'
-import 'vue3-carousel/dist/carousel.css'
 import { ref, onMounted, computed, watch, nextTick, inject, type Ref, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const carouselRef = ref<InstanceType<typeof Carousel> | null>(null)
+const carouselRef = ref<HTMLElement | null>(null)
+const currentSlide = ref(2) // Start at slide 2 (initial slide)
+const showControls = ref(false)
 const loadedMedia = ref<Set<number>>(new Set())
 const showCarousel = ref(false)
 const mediaCache = ref<Map<string, HTMLVideoElement | HTMLImageElement>>(new Map())
@@ -219,7 +225,8 @@ onMounted(async () => {
   
   // Start on slide 2
   nextTick(() => {
-    carouselRef.value?.slideTo(1)
+    // Use our custom slideTo function directly
+    slideTo(1)
   })
 })
 
@@ -239,14 +246,84 @@ onUnmounted(() => {
   mediaCache.value.clear()
 })
 
-const slideTo = (index: number) => {
-  carouselRef.value?.slideTo(index)
+// For navigating from outside component
+const handleExternalNavigate = (index: number) => {
+  slideTo(index)
 }
 
-defineExpose({ slideTo })
+// Functions to control the carousel
+const nextSlide = () => {
+  if (currentSlide.value < slides.length - 1) {
+    currentSlide.value++
+  } else {
+    currentSlide.value = 0 // Loop back to first slide
+  }
+}
+
+const prevSlide = () => {
+  if (currentSlide.value > 0) {
+    currentSlide.value--
+  } else {
+    currentSlide.value = slides.length - 1 // Loop to last slide
+  }
+}
+
+const slideTo = (index: number) => {
+  if (index >= 0 && index < slides.length) {
+    currentSlide.value = index
+  }
+}
+
+defineExpose({ slideTo: handleExternalNavigate, nextSlide, prevSlide })
 </script>
 
 <style scoped>
+.custom-carousel {
+  position: relative;
+  width: 100%;
+}
+
+.carousel-inner {
+  display: flex;
+  transition: transform 0.5s ease;
+  width: 100%;
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  width: 100%;
+}
+
+.carousel-controls {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 15px;
+}
+
+.carousel-control {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.carousel-control:hover {
+  opacity: 1;
+}
 :deep(.carousel__track) {
   overflow: visible;
 }

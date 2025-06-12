@@ -34,9 +34,10 @@
 
   <title>Ejiro Lennox</title>
 
-  <link rel="preload" href="/videos/higher.mov" as="video" type="video/quicktime">
-  <link rel="preload" href="/videos/duality.mov" as="video" type="video/quicktime">
-  <link rel="preload" href="/videos/unknownt.mov" as="video" type="video/quicktime">
+  <!-- Changed preload to use 'fetch' instead of 'video' which is not a valid value -->
+  <link rel="preload" href="/videos/higher.mov" as="fetch" type="video/quicktime" crossorigin="anonymous">
+  <link rel="preload" href="/videos/duality.mov" as="fetch" type="video/quicktime" crossorigin="anonymous">
+  <link rel="preload" href="/videos/unknownt.mov" as="fetch" type="video/quicktime" crossorigin="anonymous">
 </head>
 
 <body style="background-color: #EDE9E5;">
